@@ -1,20 +1,16 @@
-async function detectText(fileName) {
-  const vision = require('@google-cloud/vision');
+const { ImageAnnotatorClient } = require('@google-cloud/vision');
 
-  // Creates a client
-  const client = new vision.ImageAnnotatorClient({
-    keyFilename: 'imgtotext-402215-ab70869cba9a.json',
-  });
+const client = new ImageAnnotatorClient({
+  keyFilename: 'imgtotext-402215-ab70869cba9a.json',
+});
 
-  /**
-   * TODO(developer): Uncomment the following line before running the sample.
-   */
-  //const fileName = './resources/test.jpg';
-
-  // Performs text detection on the local file
-  const [result] = await client.textDetection('tesseract_sample.png');
-  const detections = result.textAnnotations;
+async function detectText() {
+  const [result] = await client.textDetection('sample5.jpg');
+  const annotations = result.textAnnotations;
   console.log('Text:');
-  detections.forEach(text => console.log(text));
+  annotations.forEach(annotation => {
+    console.log(annotation.description);
+  });
 }
+
 detectText();
