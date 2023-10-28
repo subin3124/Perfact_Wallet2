@@ -5,7 +5,12 @@ const path = require('path');
 const static = require('serve-static');
 const cors = require('cors');
 const dbconfig = require('./config/dbconfig.json');
-
+const {ImageAnnotatorClient} = require("@google-cloud/vision");
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+const client = new ImageAnnotatorClient({
+    keyFilename: 'imgtotext-402215-ab70869cba9a.json',
+});
 // MySQL 연결을 위한 풀을 생성
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -14,7 +19,8 @@ const pool = mysql.createPool({
     password: dbconfig.password,
     database: dbconfig.database,
     debug: false
-})
+});
+
 
 const app = express();
 app.use(cors());
@@ -42,10 +48,12 @@ app.post('/callDB', (req, res) => {
     // 쿼리 결과를 받아서 resData 객체에 저장하고 응답
     pool.getConnection((err, conn)=>{
         if (err) {
+
+            console.log('pool.getConnection 에러발생: ' + err.message);
             conn.release();
-            console.log('pool.getConnection 에러발생: ' + err.message); 
             console.dir(err);
             res.json(resData);
+
             return;
         }
 
@@ -69,8 +77,23 @@ app.post('/callDB', (req, res) => {
         })
     })
     
-})
+});
+app.get('/excel/:id', (req, res) => {
 
+});
+app.post('/image',upload.single('image'),(req, res)=> {
+    console.log(req.file)
+    const detectText = async (selectImage) => {
+        const [result] = await client.textDetection(selectImage);
+        const annotations = result.textAnnotations;
+        console.log('Text:');
+        annotations.forEach(annotation => {
+            console.log(annotation.description);
+            return annotation.description;
+        });
+    }
+    detectText(req.file);
+});
 // 서버를 3000번 포트에서 실행
 app.listen(3000, ()=>{
     console.log('Server started at 3000');

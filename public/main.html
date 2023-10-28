@@ -6,36 +6,13 @@
     <title>Document</title>
 </head>
 <body>
+<form action="/image" method="post" enctype="multipart/form-data">
     <button id="uploadButton">파일업로드</button>
-    <input type="file" id="uploader">
+    <input type="file" id="image" name="image">
+</form>
     <script>
-        const { ImageAnnotatorClient } = require('@google-cloud/vision');
-
-        const client = new ImageAnnotatorClient({
-            keyFilename: 'imgtotext-402215-ab70869cba9a.json',
-        });
-
-        const detectText = async (selectImage) => {
-            const [result] = await client.textDetection(selectImage);
-            const annotations = result.textAnnotations;
-            console.log('Text:');
-            annotations.forEach(annotation => {
-                return annotation.description;
-            });
-        }
-
-        const btn = document.getElementById("uploadButton");
-
-        btn.addEventListener("click", ()=>{
-            const elm = document.getElementById('uploader');
-            const detectText = detectText(elm.value);
-
-            // 물품이름이랑 가격만 인식하는 방법 필요
-
-            
             let name;
             let price;
-
             fetch('/callDB',{
 				method : 'post',
 				headers : {
@@ -45,7 +22,6 @@
                     objectName: name,
                     price: price
 				})
-			});
         });
     </script>
 </body>
