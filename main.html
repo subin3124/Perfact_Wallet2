@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="uploadButton">파일업로드</button>
+    <input type="file" id="uploader">
+    <script>
+        const btn = document.getElementById("uploadButton");
+
+        btn.addEventListener("click", ()=>{
+            fetch('/callDB',{
+				method : 'post',
+				headers : {
+					'content-type':'application/json'
+				},
+				body : JSON.stringify({
+                    objectName: name,
+                    price: price
+				})
+			});
+        });
+    </script>
+</body>
+</html>

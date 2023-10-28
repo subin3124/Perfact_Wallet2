@@ -1,7 +1,7 @@
 {
-    "host": "localhost",
+    "host": "inugyo.c1juzjfbdszy.ap-northeast-2.rds.amazonaws.com",
     "user": "root",
     "password": "song1201*",
-    "database": "gyoyang",
+    "database": "Perfect_wallet_DB",
     "port": 3306
 }
