@@ -92,7 +92,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
             return annotation.description;
         });
     }
-    detectText(req.file);
+    detectText(req.file.path);
 });
 // 서버를 3000번 포트에서 실행
 app.listen(3000, ()=>{
