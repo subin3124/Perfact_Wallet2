@@ -1,13 +1,34 @@
 // 필요한 모듈을 불러오기
 const express = require('express');
 const mysql = require('mysql2');
+const https = require('https');
 const path = require('path');
+const fs = require('fs');
+
 const static = require('serve-static');
 const cors = require('cors');
 const dbconfig = require('./config/dbconfig.json');
 const {ImageAnnotatorClient} = require("@google-cloud/vision");
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const {response} = require("express");
+const {createServer} = require("http");
+const storage = multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,"uploads/")
+        // 이 경로로 저장=> 작업영역/uploads/videos/
+    },
+    filename:(req,file,cb)=>{
+        cb(null,"image"+"_"+Date.now()+".jpg");
+        // 저장방식=> id_현재시간.mp4 형식
+    }
+});
+const Httpsoptions = {
+    key: fs.readFileSync('./escinu.kro_kr_key'),
+    cert: fs.readFileSync('./escinu_kro_kr.crt'),
+    ca  : fs.readFileSync('./escinu_kro_kr.ca-bundle')
+};
+
+const upload = multer({ storage})
 const client = new ImageAnnotatorClient({
     keyFilename: 'imgtotext-402215-ab70869cba9a.json',
 });
@@ -83,7 +104,7 @@ app.get('/excel/:id', (req, res) => {
 });
 app.post('/image',upload.single('image'),(req, res)=> {
     console.log(req.file)
-    const detectText = async (selectImage) => {
+   /* const detectText = async (selectImage) => {
         const [result] = await client.textDetection(selectImage);
         const annotations = result.textAnnotations;
         console.log('Text:');
@@ -92,9 +113,36 @@ app.post('/image',upload.single('image'),(req, res)=> {
             return annotation.description;
         });
     }
-    detectText(req.file.path);
+    detectText(req.file.path); */
+    const url = 'https://escinu.kro.kr/hostingImage/'+req.file.filename;
+    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': '카카오톡확인'
+        },
+        body: `{'urlSource': '${url}'}`
+    }).then((r) => {
+        let url2 = r.headers.get("Operation-location");
+        console.log("abcd"+url2);
+        setTimeout(function() {
+            console.log('Blah blah blah blah extra-blah');
+
+        fetch(url2, {
+            headers: {
+                'Ocp-Apim-Subscription-Key': '카카오톡확인'
+            }
+        })  .then((response) => response.json())
+            .then((data) => {res.send((data.analyzeResult.documents[0].fields.Total.content))})
+        }, 3000);
+    });
+
 });
-// 서버를 3000번 포트에서 실행
-app.listen(3000, ()=>{
-    console.log('Server started at 3000');
+app.get('/hostingImage/:file', (req, res) =>{
+    const options = {
+        root: path.join(__dirname, 'uploads')
+    };
+    res.sendFile(req.param('file'),options);
 })
+// 서버를 3000번 포트에서 실행
+https.createServer(Httpsoptions,app).listen(443);
