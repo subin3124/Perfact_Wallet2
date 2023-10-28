@@ -9,9 +9,30 @@
     <button id="uploadButton">파일업로드</button>
     <input type="file" id="uploader">
     <script>
+        const { ImageAnnotatorClient } = require('@google-cloud/vision');
+
+        const client = new ImageAnnotatorClient({
+            keyFilename: 'imgtotext-402215-ab70869cba9a.json',
+        });
+
+        const detectText = async (selectImage) => {
+            const [result] = await client.textDetection(selectImage);
+            const annotations = result.textAnnotations;
+            console.log('Text:');
+            annotations.forEach(annotation => {
+                return annotation.description;
+            });
+        }
+
         const btn = document.getElementById("uploadButton");
 
         btn.addEventListener("click", ()=>{
+            const elm = document.getElementById('uploader');
+            const detectText = detectText(elm.value);
+
+            let name;
+            let price;
+
             fetch('/callDB',{
 				method : 'post',
 				headers : {
