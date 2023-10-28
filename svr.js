@@ -26,17 +26,18 @@ app.use('/public', static(path.join(__dirname, 'public')));
 app.post('/callDB', (req, res) => {
     console.log('callDB 호출됨')
     
-    const objectName = req.body.objectName;
-    const price = req.body.price;
+    const query_objectName = req.body.objectName;
+    const query_price = req.body.price;
 
     // 쿼리 결과를 받을 resData
     const resData = {}
     resData.result = 'error'
-    resData.이름 = []
-    
+    resData.objectName = []
+    resData.price = []
+
 
     // 최종 쿼리문
-    console.log(`select * from `);
+    console.log(`insert into perfect_wallet (objectName, price) values(${query_objectName}, ${query_price})`);
 
     // 쿼리 결과를 받아서 resData 객체에 저장하고 응답
     pool.getConnection((err, conn)=>{
@@ -48,7 +49,7 @@ app.post('/callDB', (req, res) => {
             return;
         }
 
-        conn.query(`select * from `, (error, rows, fields)=>{
+        conn.query(`insert into perfect_wallet (objectName, price) values(${query_objectName}, ${query_price})`, (error, rows, fields)=>{
             if (error) {  // db query 실패
                 conn.release();
                 console.dir(error);
@@ -59,12 +60,12 @@ app.post('/callDB', (req, res) => {
             conn.release();
             resData.result = 'ok';
 
-            // DB의 내용을 resData에 저장
-            rows.forEach((val)=>{
-                resData.이름.push(val.교과목명)
+            // // DB의 내용을 resData에 저장
+            // rows.forEach((val)=>{
+            //     resData.이름.push(val.교과목명)
                 
-            })
-            res.json(resData);
+            // })
+            // res.json(resData);
         })
     })
     
