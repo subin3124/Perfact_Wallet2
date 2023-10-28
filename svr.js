@@ -26,37 +26,17 @@ app.use('/public', static(path.join(__dirname, 'public')));
 app.post('/callDB', (req, res) => {
     console.log('callDB 호출됨')
     
-    const last_query = req.body.last_query;
-    const query_GE = req.body._GE;
-    const query_arr0 = req.body._query_arr0;
-    const query_arr1 = req.body._query_arr1;
-    const query_arr2 = req.body._query_arr2;
-    const query_arr3 = req.body._query_arr3;
-    const query_time = req.body._idx;
-
-    const query_checklist = query_arr0 + query_arr1 + query_arr2 + query_arr3;
+    const objectName = req.body.objectName;
+    const price = req.body.price;
 
     // 쿼리 결과를 받을 resData
     const resData = {}
     resData.result = 'error'
     resData.이름 = []
-    resData.교수 = []
-    resData.시간 = []
-    resData.이수구분 = []
-    resData.발표 = []
-    resData.시험 = []
-    resData.출석 = []
-    resData.레포트 = []
-    resData.토론 = []
-    resData.조별 = []
-    resData.실습 = []
-    resData.평가 = []
-    resData.퀴즈 = []
-    resData.특이사항 = []
-    resData.학점 = []
+    
 
     // 최종 쿼리문
-    console.log(`select * from kyoyang where not regexp_like ${query_time} and '수강제한학과' not like '%${query_GE}%' and ${query_checklist} ${last_query};`);
+    console.log(`select * from `);
 
     // 쿼리 결과를 받아서 resData 객체에 저장하고 응답
     pool.getConnection((err, conn)=>{
@@ -68,7 +48,7 @@ app.post('/callDB', (req, res) => {
             return;
         }
 
-        conn.query(`select * from kyoyang where not regexp_like ${query_time} and 수강제한학과 not like '%${query_GE}%' and ${query_checklist} ${last_query};`, (error, rows, fields)=>{
+        conn.query(`select * from `, (error, rows, fields)=>{
             if (error) {  // db query 실패
                 conn.release();
                 console.dir(error);
@@ -82,20 +62,7 @@ app.post('/callDB', (req, res) => {
             // DB의 내용을 resData에 저장
             rows.forEach((val)=>{
                 resData.이름.push(val.교과목명)
-                resData.교수.push(val.교수명)
-                resData.시간.push(val.시간표)
-                resData.이수구분.push(val.이수구분)
-                resData.발표.push(val.발표)
-                resData.시험.push(val.시험)
-                resData.출석.push(val.출석)
-                resData.레포트.push(val.레포트)
-                resData.토론.push(val.토론)
-                resData.조별.push(val.조별)
-                resData.실습.push(val.실습)
-                resData.평가.push(val.평가방법)
-                resData.퀴즈.push(val.퀴즈)
-                resData.학점.push(val.학점)
-                resData.특이사항.push(val.crosscheck)
+                
             })
             res.json(resData);
         })
