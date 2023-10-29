@@ -69,7 +69,6 @@ app.post('/callDB', (req, res) => {
     // 쿼리 결과를 받아서 resData 객체에 저장하고 응답
     pool.getConnection((err, conn)=>{
         if (err) {
-
             console.log('pool.getConnection 에러발생: ' + err.message);
             conn.release();
             console.dir(err);
@@ -119,21 +118,21 @@ app.post('/image',upload.single('image'),(req, res)=> {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': '카카오톡확인'
+            'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
         },
         body: `{'urlSource': '${url}'}`
     }).then((r) => {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+url2);
         setTimeout(function() {
-            console.log('Blah blah blah blah extra-blah');
+
 
         fetch(url2, {
             headers: {
-                'Ocp-Apim-Subscription-Key': '카카오톡확인'
+                'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
             }
         })  .then((response) => response.json())
-            .then((data) => {res.send((data.analyzeResult.documents[0].fields.Total.content))})
+            .then((data) => {res.send(data.analyzeResult.documents[0].fields); console.log(data.analyzeResult.documents[0].fields)})
         }, 3000);
     });
 

@@ -6,23 +6,33 @@
     <title>Document</title>
 </head>
 <body>
-<form action="/image" method="post" enctype="multipart/form-data">
-    <button id="uploadButton">파일업로드</button>
+    <button id="uploadButton" onclick="onUpload()">파일업로드</button>
     <input type="file" id="image" name="image">
-</form>
-    <script>/*
-            let name;
-            let price;
-            fetch('/callDB',{
-				method : 'post',
-				headers : {
-					'content-type':'application/json'
-				},
-				body : JSON.stringify({
-                    objectName: name,
-                    price: price
-				})
-        });*/
+    <script>
+        function onUpload() {
+            console.log("test1");
+            let formdata = new FormData();
+            formdata.append('image',document.getElementById('image').files[0])
+            fetch('/image', {
+
+                method : "post",
+                body : formdata
+            }).then((r) => r.json())
+                .then((res) => {
+                    console.log(res.Items.valueArray[1]);
+                    fetch('/callDB', {
+                        method: 'post',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            objectName: res.Items.valueArray[0].valueObject.Description.content,
+                            price: res.Items.value.valueArray[1].valueObect.TotalPrice.valueNumber
+                        })
+                    });
+                })
+
+        }
     </script>
 </body>
 </html>
