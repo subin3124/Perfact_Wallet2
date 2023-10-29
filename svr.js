@@ -12,6 +12,7 @@ const {ImageAnnotatorClient} = require("@google-cloud/vision");
 const multer  = require('multer')
 const {response} = require("express");
 const {createServer} = require("http");
+const ExcelJS = require("./ExcelJS");
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -99,7 +100,15 @@ app.post('/callDB', (req, res) => {
     
 });
 app.get('/excel/:id', (req, res) => {
-
+    let data //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
+    data = [{item : '라면', qu : 1, cost : 5000}];
+    const excel = new ExcelJS();
+    excel.addWorkSheet('workSheet1');
+    excel.setSheet('workSheet1');
+    excel.initColumns();
+    excel.addRows(data);
+    let workbook = excel.getWorkbook()
+    workbook.xlsx.write(res).then((r) => res.end());
 });
 app.post('/image',upload.single('image'),(req, res)=> {
     console.log(req.file)

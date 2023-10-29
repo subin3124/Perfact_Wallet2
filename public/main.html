@@ -8,7 +8,22 @@
 <body>
     <button id="uploadButton" onclick="onUpload()">파일업로드</button>
     <input type="file" id="image" name="image">
+    <button id="downloadExcel" onclick="downloadExcel()">엑셀</button>
     <script>
+        function downloadExcel() {
+            fetch('/excel/1', {
+               method : "GET",
+            }).then((res) => res.blob())
+                .then((data) => {
+                const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+                const url = window.URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                anchor.href = url;
+                anchor.download = `테스트.xlsx`;
+                anchor.click();
+                window.URL.revokeObjectURL(url);
+            });
+        }
         function onUpload() {
             console.log("test1");
             let formdata = new FormData();

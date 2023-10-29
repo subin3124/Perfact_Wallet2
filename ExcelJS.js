@@ -1,22 +1,17 @@
-import {Workbook} from "exceljs";
-
 const exceljs = require('exceljs');
-export class ExcelJS{
-    names;
-    prices;
+class ExcelJS{
     workbook;
     sheet;
-  constructor(resJSON) {
-      this.resJSON = resJSON;
-      this.workbook = new Workbook();
+  constructor() {
+      this.workbook = new exceljs.Workbook();
   }
   addWorkSheet(name){
-      this.workbook.addWorkSheet(name);
+      this.workbook.addWorksheet(name);
   }
    set JSON(resJSON) {
       this.resJSON = resJSON;
   }
-  set sheet(name) {
+  setSheet(name) {
       this.sheet = this.workbook.getWorksheet(name);
   }
   initColumns() {
@@ -27,10 +22,9 @@ export class ExcelJS{
       ]
   }
   addRows(data) {
-      data.map((item, index) => {this.sheet.addRows(item)});
+      data.map((item, index) => {this.sheet.addRow(item)});
   }
-  parseJSON() {
-      let data = JSON.parse(this.resJSON());
+  getWorkbook() {
+      return this.workbook;
   }
-
-}
+} module.exports = ExcelJS
