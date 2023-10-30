@@ -4,8 +4,8 @@ const client = new ImageAnnotatorClient({
   keyFilename: 'imgtotext-402215-ab70869cba9a.json',
 });
 
-const detectText = async (selectImage) => {
-  const [result] = await client.textDetection(selectImage);
+async function detectText() {
+  const [result] = await client.textDetection('sample5.jpg');
   const annotations = result.textAnnotations;
   console.log('Text:');
   annotations.forEach(annotation => {
