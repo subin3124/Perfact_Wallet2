@@ -155,16 +155,18 @@ app.post('/image',upload.single('image'),(req, res)=> {
     }
     detectText(req.file.path); */
     const url = 'https://inuesc.azurewebsites.net/hostingImage/'+req.file.filename;
-    fetch('https://inuesc.azurewebsites.net/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
+    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
         },
-        body: '{"urlSource": "${url}"}'
-    }).then((r) => {
+        body: "{'urlSource': '${url}'}"
+    }).
+    then((r) => {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+url2);
+
         setTimeout(function() {
             fetch(url2, {
                 headers: {
@@ -173,6 +175,8 @@ app.post('/image',upload.single('image'),(req, res)=> {
             })  .then((response) => response.json())
                 .then((data) => {res.send(data.analyzeResult.documents[0].fields); console.log(data.analyzeResult.documents[0].fields)})
         }, 3000);
+    }).catch((reason) =>{
+        console.log(reason);
     });
 });
 app.get('/hostingImage/:file', (req, res) =>{
