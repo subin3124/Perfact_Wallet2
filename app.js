@@ -96,10 +96,10 @@ function insertDB(objectName, price, qu) {
 app.get('/excel/:id', (req, res) => {
     let data //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것) 
 
-    data.item = []
-    data.qu = []
-    data.cost = []
-
+ //   data.item = []
+ //   data.qu = []
+ //   data.cost = []
+/*
     // 쿼리문
     console.log(`select * from perfect_wallet;`);
 
@@ -132,7 +132,7 @@ app.get('/excel/:id', (req, res) => {
         })
     })
 
-
+*/
      data = [{item : '라면', qu : 1, cost : 5000}];
     const excel = new ExcelJS();
     excel.addWorkSheet('workSheet1');
@@ -161,7 +161,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
         },
-        body: {'urlSource': '${url}'}
+        body: '{"urlSource": "${url}"}'
     }).then((r) => {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+url2);
