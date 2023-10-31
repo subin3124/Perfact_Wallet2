@@ -167,13 +167,17 @@ app.post('/image',upload.single('image'),(req, res)=> {
     then((r) => {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+r.status);
+        console.log("aaa"+url2);
         console.log(r.json());
         setTimeout(function() {
             fetch(url2, {
                 headers: {
                     'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
                 }
-            })  .then((response) => response.json())
+            })  .then((response) => {
+                    console.log(response.status);
+                    console.log(response.body);
+                    return response.json()})
                 .then((data) => {res.send(data.analyzeResult.documents[0].fields); console.log(data.analyzeResult.documents[0].fields)})
         }, 3000);
     }).catch((reason) =>{
