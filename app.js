@@ -182,4 +182,4 @@ app.get('/hostingImage/:file', (req, res) =>{
     res.sendFile(req.param('file'),options);
 })
 // 서버를 3000번 포트에서 실행
-https.createServer(Httpsoptions,app).listen(443);
+app.listen(80);
