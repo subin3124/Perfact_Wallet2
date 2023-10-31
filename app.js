@@ -133,7 +133,7 @@ app.get('/excel/:id', (req, res) => {
     })
 
 
-    // data = [{item : '라면', qu : 1, cost : 5000}];
+     data = [{item : '라면', qu : 1, cost : 5000}];
     const excel = new ExcelJS();
     excel.addWorkSheet('workSheet1');
     excel.setSheet('workSheet1');
@@ -161,7 +161,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
         },
-        body: `{'urlSource': '${url}'}`
+        body: {'urlSource': '${url}'}
     }).then((r) => {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+url2);
