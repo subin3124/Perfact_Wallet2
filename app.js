@@ -182,4 +182,6 @@ app.get('/hostingImage/:file', (req, res) =>{
     res.sendFile(req.param('file'),options);
 })
 // 서버를 3000번 포트에서 실행
-app.listen(80);
+app.listen(8080, () => {
+    console.log('program started with 8080');
+});
