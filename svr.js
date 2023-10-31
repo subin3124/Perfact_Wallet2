@@ -50,12 +50,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/public', static(path.join(__dirname, 'public')));
 
+app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
+    const excel = new ExcelJS();
+    await excel.loadWorkbook(req.file.filename);
+    excel.setSheet('one');
+    let data = excel.getRows();
+    for(let d in data) {
+        insertDB(d[0], d[1], d[2]);
+    }
+});
+
 // DB에서 데이터를 검색하고 클라이언트에 응답
 app.post('/callDB', (req, res) => {
-    
-    const query_item = req.body.objectName;
-    const query_cost = req.body.price;
-    const query_qu = req.body.qu;  // 수량 받는 부분
+    insertDB(req.body.objectName,req.body.price,req.body.qu);
+});
+function insertDB(objectName, price, qu) {
+    const query_item = objectName;
+    const query_cost = price;
+    const query_qu = qu;  // 수량 받는 부분
 
     // 쿼리문
     console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
@@ -64,7 +76,7 @@ app.post('/callDB', (req, res) => {
     pool.getConnection((err, conn)=>{
         if (err) {
             conn.release();
-            console.log('pool.getConnection 에러발생: ' + err.message); 
+            console.log('pool.getConnection 에러발생: ' + err.message);
             console.dir(err);
             res.json(data);
             return;
@@ -80,8 +92,7 @@ app.post('/callDB', (req, res) => {
             conn.release();
         })
     })
-    
-});
+}
 app.get('/excel/:id', (req, res) => {
     let data //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것) 
 
@@ -117,7 +128,7 @@ app.get('/excel/:id', (req, res) => {
                 data.qu.push(val.qu)
                 data.cost.push(val.cost)
             })
-            res.json(data);
+           // res.json(data);
         })
     })
 
@@ -155,17 +166,14 @@ app.post('/image',upload.single('image'),(req, res)=> {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+url2);
         setTimeout(function() {
-
-
-        fetch(url2, {
-            headers: {
-                'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
-            }
-        })  .then((response) => response.json())
-            .then((data) => {res.send(data.analyzeResult.documents[0].fields); console.log(data.analyzeResult.documents[0].fields)})
+            fetch(url2, {
+                headers: {
+                    'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
+                }
+            })  .then((response) => response.json())
+                .then((data) => {res.send(data.analyzeResult.documents[0].fields); console.log(data.analyzeResult.documents[0].fields)})
         }, 3000);
     });
-
 });
 app.get('/hostingImage/:file', (req, res) =>{
     const options = {
