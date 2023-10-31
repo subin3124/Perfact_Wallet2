@@ -154,8 +154,8 @@ app.post('/image',upload.single('image'),(req, res)=> {
         });
     }
     detectText(req.file.path); */
-    const url = 'https://escinu.kro.kr/hostingImage/'+req.file.filename;
-    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
+    const url = 'https://inuesc.azurewebsites.net/hostingImage/'+req.file.filename;
+    fetch('https://inuesc.azurewebsites.net/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
