@@ -168,7 +168,6 @@ app.post('/image',upload.single('image'),(req, res)=> {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd"+r.status);
         console.log("aaa"+url2);
-        console.log(r.json());
         setTimeout(function() {
             fetch(url2, {
                 headers: {
