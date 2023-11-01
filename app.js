@@ -62,8 +62,8 @@ app.post('/callDB', (req, res) => {
     insertDB(req.body.data);
     res.send(JSON.stringify({status:'ok'}));
 });
-app.get('/getDB', (req, res) => {
-    res.send(db.ReadAll());
+app.get('/getDB', async (req, res) => {
+    res.send(await db.ReadAll('select * from perfect_wallet_DB', db.getInstance()));
 });
 function insertDB(data) {
     console.log(data);
@@ -71,10 +71,10 @@ function insertDB(data) {
     // 쿼리문
     //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
 }
-app.get('/excel/:id', (req, res) => {
+app.get('/excel/:id', async (req, res) => {
     let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
     console.log('1');
-    data = db.ReadAll();
+    data = await db.ReadAll('select * from perfect_wallet_DB', db.getInstance());
     // data = [{item : '라면', qu : 1, cost : 5000}];
     console.log('debug : ' + data);
     const excel = new ExcelJS();

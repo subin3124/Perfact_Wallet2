@@ -4,6 +4,9 @@ class Database{
     constructor() {
         this.db = new sqlite.Database('data.db', (err) => {if(err) console.error(err.message); console.log('db conncted.');});
     }
+    getInstance() {
+        return this.db;
+    }
     Insert(data) {
         // data = [{item : '라면', qu : 1, cost : 3500}]
         for(let i in data) {
@@ -14,24 +17,13 @@ class Database{
             });
         }
     }
-    ReadAll() {
-        //let data = [];
-
-       let dt = this.db.all(`select * from perfect_wallet_DB`,(err, rows) => {
-            let data = [];
-            console.log('2');
-            if (err)
-                console.error(err.message);
-            console.log('test0');
-            rows.forEach((row) => {
-                console.log('read : '+row);
-                data.push(row);
+    async ReadAll(query,db){
+        return new Promise(function(resolve,reject){
+            db.all(query, function(err,rows){
+                if(err){return reject(err);}
+                resolve(rows);
             });
-            console.log('abcdaaa : '+JSON.stringify(data));
-            return data;
         });
-        //console.log(data);
-        return dt;
     }
 
 }module.exports = Database;
