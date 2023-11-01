@@ -1,6 +1,7 @@
 const sqlite = require('sqlite3').verbose();
 class Database{
     db;
+    dt;
     constructor() {
         this.db = new sqlite.Database('data.db', (err) => {if(err) console.error(err.message); console.log('db conncted.');});
     }
@@ -16,8 +17,10 @@ class Database{
     }
     ReadAll() {
         //let data = [];
-        return this.db.all(`select * from perfect_wallet_DB`,[] ,(err, rows) => {
+        let dat = {}
+       this.dt = this.db.all(`select * from perfect_wallet_DB`,(err, rows) => {
             let data = [];
+            console.log('2');
             if (err)
                 console.error(err.message);
             console.log('test0');
@@ -25,9 +28,11 @@ class Database{
                 console.log('read : '+row);
                 data.push(row);
             });
-            return data;
+            console.log('abcdaaa : '+data);
         });
         //console.log(data);
     }
-
+    getDT(){
+        return dt;
+    }
 }module.exports = Database;
