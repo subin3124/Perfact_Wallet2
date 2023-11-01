@@ -14,6 +14,7 @@ const multer  = require('multer')
 const {response} = require("express");
 const {createServer} = require("http");
 const ExcelJS = require("./ExcelJS");
+const Database = require("./Database");
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -21,7 +22,7 @@ const storage = multer.diskStorage({
     },
     filename:(req,file,cb)=>{
         cb(null,"image"+"_"+Date.now()+".jpg");
-        // 저장방식=> id_현재시간.mp4 형식
+        // 저장방식=> image_현재시간.jpg 형식
     }
 });
 
@@ -39,7 +40,7 @@ const pool = mysql.createPool({
     debug: false
 });
 
-
+const db = new Database();
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -51,82 +52,25 @@ app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
     await excel.loadWorkbook(req.file.filename);
     excel.setSheet('one');
     let data = excel.getRows();
-    for(let d in data) {
-        insertDB(d[0], d[1], d[2]);
-    }
+    console.log(data);
+    insertDB(data);
 });
 
 // DB에서 데이터를 검색하고 클라이언트에 응답
 app.post('/callDB', (req, res) => {
-    insertDB(req.body.objectName,req.body.price,req.body.qu);
+    insertDB(req.body.data);
 });
-function insertDB(objectName, price, qu) {
-    const query_item = objectName;
-    const query_cost = price;
-    const query_qu = qu;  // 수량 받는 부분
-
+app.get('/getDB', (req, res) => {
+   res.send(db.ReadAll());
+});
+function insertDB(data) {
+    db.Insert(data);
     // 쿼리문
-    console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
-
-    // 쿼리 결과를 받아서 data 객체에 저장하고 응답
-    pool.getConnection((err, conn)=>{
-        if (err) {
-            console.log('pool.getConnection 에러발생: ' + err.message);
-            conn.release();
-
-            console.dir(err);
-            res.json(data);
-            return;
-        }
-
-        conn.query(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`, (error, rows, fields)=>{
-            if (error) {  // db query 실패
-                conn.release();
-                console.dir(error);
-                res.json(data);
-                return;
-            }
-            conn.release();
-        })
-    })
+    //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
 }
 app.get('/excel/:id', (req, res) => {
     let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
-
- //   data.item = []
- //   data.qu = []
- //   data.cost = []
-    // 쿼리문
-    console.log(`select * from perfect_wallet;`);
-
-    // 쿼리 결과를 받아서 data 객체에 저장하고 응답
-    pool.getConnection((err, conn)=>{
-        if (err) {
-            conn.release();
-            console.log('pool.getConnection 에러발생: ' + err.message); 
-            console.dir(err);
-            res.json(data);
-            return;
-        }
-
-        conn.query(`select * from perfect_wallet;`, (error, rows, fields)=>{
-            if (error) {
-                console.log(error.message);// db query 실패
-                conn.release();
-                res.json(data);
-                return;
-            }
-            conn.release();
-
-            // DB의 내용을 data에 저장
-            rows.forEach((val)=>{
-                data.push({item : val.item, qu : val.qu, cost : val.cost});
-            })
-           // res.json(data);
-        })
-    })
-
-
+    data = db.ReadAll();
     // data = [{item : '라면', qu : 1, cost : 5000}];
     const excel = new ExcelJS();
     excel.addWorkSheet('workSheet1');
