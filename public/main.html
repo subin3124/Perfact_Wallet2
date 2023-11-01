@@ -37,10 +37,9 @@
                     console.log(res);
                     let data = [];
                     for(let array in res.Items.valueArray) {
-                        console.log(array);
-                        data.push({objectName: array.valueObject.Description.content,
-                            price: array.valueObject.TotalPrice.valueNumber,
-                            qu: array.valueObject.Quantity.valueNumber});
+                        data.push({objectName: res.Items.valueArray[array].valueObject.Description.content,
+                            price: res.Items.valueArray[array].valueObject.TotalPrice.valueNumber,
+                            qu: res.Items.valueArray[array].valueObject.Quantity.valueNumber});
                     }
                     console.log(data);
                     fetch('/callDB', {
