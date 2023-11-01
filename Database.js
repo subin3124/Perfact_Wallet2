@@ -21,6 +21,7 @@ class Database{
                console.error(err.message);
            data = rows;
         });
+        console.log(data);
         return data;
     }
 
