@@ -58,6 +58,7 @@ app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
 
 // DB에서 데이터를 검색하고 클라이언트에 응답
 app.post('/callDB', (req, res) => {
+    console.log(req.body.data);
     insertDB(req.body.data);
 });
 app.get('/getDB', (req, res) => {
