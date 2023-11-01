@@ -37,6 +37,7 @@
                     console.log(res);
                     let data = [];
                     for(let array in res.Items.valueArray) {
+                        console.log(array);
                         data.push({objectName: array.valueObject.Description.content,
                             price: array.valueObject.TotalPrice.valueNumber,
                             qu: array.valueObject.Quantity.valueNumber});
