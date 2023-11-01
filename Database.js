@@ -16,7 +16,7 @@ class Database{
     }
     ReadAll() {
         //let data = [];
-        return this.db.all(`select * from perfect_wallet_DB`, (err, rows) => {
+        return this.db.all(`select * from perfect_wallet_DB`,[] ,(err, rows) => {
             let data = [];
             if (err)
                 console.error(err.message);
