@@ -20,6 +20,7 @@ class Database{
             let data = [];
             if (err)
                 console.error(err.message);
+            console.log('test0');
             rows.forEach((row) => {
                 console.log('read : '+row);
                 data.push(row);
