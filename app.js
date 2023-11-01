@@ -71,8 +71,9 @@ function insertDB(objectName, price, qu) {
     // 쿼리 결과를 받아서 data 객체에 저장하고 응답
     pool.getConnection((err, conn)=>{
         if (err) {
-            conn.release();
             console.log('pool.getConnection 에러발생: ' + err.message);
+            conn.release();
+
             console.dir(err);
             res.json(data);
             return;
@@ -109,9 +110,9 @@ app.get('/excel/:id', (req, res) => {
         }
 
         conn.query(`select * from perfect_wallet;`, (error, rows, fields)=>{
-            if (error) {  // db query 실패
+            if (error) {
+                console.log(error.message);// db query 실패
                 conn.release();
-                console.dir(error);
                 res.json(data);
                 return;
             }
