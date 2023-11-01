@@ -24,11 +24,6 @@ const storage = multer.diskStorage({
         // 저장방식=> id_현재시간.mp4 형식
     }
 });
-const Httpsoptions = {
-    key: fs.readFileSync('./escinu.kro_kr_key'),
-    cert: fs.readFileSync('./escinu_kro_kr.crt'),
-    ca  : fs.readFileSync('./escinu_kro_kr.ca-bundle')
-};
 
 const upload = multer({ storage})
 const client = new ImageAnnotatorClient({
