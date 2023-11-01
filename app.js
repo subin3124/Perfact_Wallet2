@@ -8,6 +8,7 @@ const fs = require('fs');
 const static = require('serve-static');
 const cors = require('cors');
 const dbconfig = require('./config/dbconfig.json');
+const azureconfig = require('./config/azureconfig.json');
 const {ImageAnnotatorClient} = require("@google-cloud/vision");
 const multer  = require('multer')
 const {response} = require("express");
@@ -94,12 +95,11 @@ function insertDB(objectName, price, qu) {
     })
 }
 app.get('/excel/:id', (req, res) => {
-    let data //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것) 
+    let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
 
  //   data.item = []
  //   data.qu = []
  //   data.cost = []
-/*
     // 쿼리문
     console.log(`select * from perfect_wallet;`);
 
@@ -124,16 +124,14 @@ app.get('/excel/:id', (req, res) => {
 
             // DB의 내용을 data에 저장
             rows.forEach((val)=>{
-                data.item.push(val.item)
-                data.qu.push(val.qu)
-                data.cost.push(val.cost)
+                data.push({item : val.item, qu : val.qu, cost : val.cost});
             })
            // res.json(data);
         })
     })
 
-*/
-     data = [{item : '라면', qu : 1, cost : 5000}];
+
+    // data = [{item : '라면', qu : 1, cost : 5000}];
     const excel = new ExcelJS();
     excel.addWorkSheet('workSheet1');
     excel.setSheet('workSheet1');
@@ -160,7 +158,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
+            'Ocp-Apim-Subscription-Key': `${azureconfig.key}`
         },
         body: `{'urlSource': '${url}'}`
     }).
@@ -171,7 +169,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
         setTimeout(function() {
             fetch(url2, {
                 headers: {
-                    'Ocp-Apim-Subscription-Key': '0a7af06746fb4effa619b373193f3b52'
+                    'Ocp-Apim-Subscription-Key': `${azureconfig.key}`
                 }
             })  .then((response) => {
                     console.log(response.status);

@@ -1,0 +1,6 @@
+config/
+*.key
+*.crt
+*.csr
+*.p7b
+node_modules/

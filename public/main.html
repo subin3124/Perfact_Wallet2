@@ -34,7 +34,7 @@
                 body : formdata
             }).then((r) => r.json())
                 .then((res) => {
-                    console.log(res.Items.valueArray[1]);
+                    console.log(res);
                     fetch('/callDB', {
                         method: 'post',
                         headers: {
@@ -42,7 +42,7 @@
                         },
                         body: JSON.stringify({
                             objectName: res.Items.valueArray[0].valueObject.Description.content,
-                            price: res.Items.valueArray[1].valueObect.TotalPrice.valueNumber
+                            price: res.Items.valueArray[1].valueObject.TotalPrice.valueNumber
                             // 수량 추가 예정
                         })
                     });
