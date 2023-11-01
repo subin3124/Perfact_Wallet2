@@ -15,8 +15,10 @@ class Database{
         }
     }
     async ReadAll() {
-        return await this.db.all(`select * from perfect_wallet_DB`);
-
+        const data = await this.db.all(`select * from perfect_wallet_DB`);
+        console.log('debugging : '+data);
+        console.log('debugging : '+data[0]);
+        return data;
     }
 
 }module.exports = Database;
