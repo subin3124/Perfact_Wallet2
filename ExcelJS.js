@@ -33,9 +33,7 @@ class ExcelJS{
       return data;
   }
   addRows(data) {
-      for(let i in data) {
-          this.sheet.addRow(data[i])
-      }
+      data.map((item, index) => {this.sheet.addRow(item)});
   }
   getWorkbook() {
       return this.workbook;
