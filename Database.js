@@ -19,9 +19,10 @@ class Database{
         this.db.all('select * from perfect_wallet_DB', [], (err, rows) => {
            if(err)
                console.error(err.message);
-           data = rows;
+           console.log(rows);
+           return (rows);
         });
-        console.log(data);
+        //console.log(data);
         return data;
     }
 
