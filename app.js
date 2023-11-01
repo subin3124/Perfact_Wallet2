@@ -64,6 +64,7 @@ app.get('/getDB', (req, res) => {
    res.send(db.ReadAll());
 });
 function insertDB(data) {
+    console.log(data);
     db.Insert(data);
     // 쿼리문
     //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);

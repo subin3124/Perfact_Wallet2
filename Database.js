@@ -6,11 +6,11 @@ class Database{
     }
     Insert(data) {
         // data = [{item : '라면', qu : 1, cost : 3500}]
-        for(let dt in data) {
-            this.db.run(`INSERT INTO perfect_wallet_DB (item, qu, cost) VALUES (dt.item, dt.qu, dt.cost)`, (err) => {
+        for(let i in data) {
+            this.db.run(`INSERT INTO perfect_wallet_DB (item, qu, cost) VALUES (data[i].item, data[i].qu, data[i].cost)`, (err) => {
                 if(err)
                     console.error(err.message);
-                console.log(`inserted data ${dt.item}`);
+                console.log(`inserted data ${data[i].item}`);
             });
         }
     }
