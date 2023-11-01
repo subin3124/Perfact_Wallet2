@@ -1,7 +1,7 @@
 const sqlite = require('sqlite3').verbose();
 class Database{
     db;
-    dt;
+    dt = [];
     constructor() {
         this.db = new sqlite.Database('data.db', (err) => {if(err) console.error(err.message); console.log('db conncted.');});
     }
@@ -28,7 +28,8 @@ class Database{
                 console.log('read : '+row);
                 data.push(row);
             });
-            console.log('abcdaaa : '+data);
+            console.log('abcdaaa : '+JSON.stringify(data));
+            return data;
         });
         //console.log(data);
     }
