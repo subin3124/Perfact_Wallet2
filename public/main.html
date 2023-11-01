@@ -35,15 +35,20 @@
             }).then((r) => r.json())
                 .then((res) => {
                     console.log(res);
+                    let data = [];
+                    for(let array in res.Items.valueArray) {
+                        data.push({objectName: array.valueObject.Description.content,
+                            price: array.valueObject.TotalPrice.valueNumber,
+                            qu: array.valueObject.Quantity.valueNumber});
+                    }
+                    console.log(data);
                     fetch('/callDB', {
                         method: 'post',
                         headers: {
                             'content-type': 'application/json'
                         },
                         body: JSON.stringify({
-                            objectName: res.Items.valueArray[0].valueObject.Description.content,
-                            price: res.Items.valueArray[0].valueObject.TotalPrice.valueNumber,
-                            qu: res.Items.valueArray[0].valueObject.Quantity.valueNumber
+                            data : data
                         })
                     });
                 })
