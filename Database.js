@@ -14,11 +14,18 @@ class Database{
             });
         }
     }
-    async ReadAll() {
-        const data = await this.db.all(`select * from perfect_wallet_DB`);
-        console.log('debugging : '+data);
-        console.log('debugging : '+data[0]);
-        return data;
+    ReadAll() {
+        //let data = [];
+        return this.db.all(`select * from perfect_wallet_DB`, (err, rows) => {
+
+            if (err)
+                console.error(err.message);
+            rows.forEach((row) => {
+                console.log(row);
+            });
+            return rows;
+        });
+        //console.log(data);
     }
 
 }module.exports = Database;

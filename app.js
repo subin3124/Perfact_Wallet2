@@ -11,7 +11,7 @@ const dbconfig = require('./config/dbconfig.json');
 const azureconfig = require('./config/azureconfig.json');
 const {ImageAnnotatorClient} = require("@google-cloud/vision");
 const multer  = require('multer')
-const {response} = require("express");
+const {response, json} = require("express");
 const {createServer} = require("http");
 const ExcelJS = require("./ExcelJS");
 const Database = require("./Database");
@@ -60,6 +60,7 @@ app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
 app.post('/callDB', (req, res) => {
     console.log(req.body.data);
     insertDB(req.body.data);
+    res.send(JSON.stringify({status:'ok'}));
 });
 app.get('/getDB', (req, res) => {
    res.send(db.ReadAll());
