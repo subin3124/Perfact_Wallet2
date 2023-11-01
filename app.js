@@ -63,8 +63,7 @@ app.post('/callDB', (req, res) => {
     res.send(JSON.stringify({status:'ok'}));
 });
 app.get('/getDB', (req, res) => {
-   db.ReadAll();
-    res.send(db.getDT());
+    res.send(db.ReadAll());
 });
 function insertDB(data) {
     console.log(data);
@@ -75,8 +74,7 @@ function insertDB(data) {
 app.get('/excel/:id', (req, res) => {
     let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
     console.log('1');
-    db.ReadAll();
-    data = db.getDT()
+    data = db.ReadAll();
     // data = [{item : '라면', qu : 1, cost : 5000}];
     console.log('debug : ' + data);
     const excel = new ExcelJS();
