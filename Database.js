@@ -16,14 +16,13 @@ class Database{
     }
     ReadAll() {
         let data;
-        this.db.all('select * from perfect_wallet_DB', [], (err, rows) => {
+        this.db.all(`select * from perfect_wallet_DB`, (err, rows) => {
            if(err)
                console.error(err.message);
-           console.log(rows);
+           rows.forEach((row) => {console.log(row);});
            return (rows);
         });
         //console.log(data);
-        return data;
     }
 
 }module.exports = Database;
