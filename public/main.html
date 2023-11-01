@@ -42,8 +42,8 @@
                         },
                         body: JSON.stringify({
                             objectName: res.Items.valueArray[0].valueObject.Description.content,
-                            price: res.Items.valueArray[1].valueObject.TotalPrice.valueNumber
-                            // 수량 추가 예정
+                            price: res.Items.valueArray[0].valueObject.TotalPrice.valueNumber,
+                            qu: res.Items.valueArray[0].valueObject.Quantity.valueNumber
                         })
                     });
                 })
