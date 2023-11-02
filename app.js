@@ -37,6 +37,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/public', static(path.join(__dirname, 'public')));
+app.use('/docs', express.static(__dirname + '/doc'));
 
 app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
     const excel = new ExcelJS();
@@ -111,7 +112,10 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     console.log(response.status);
                     console.log(response.body);
                     return response.json()})
-                .then((data) => {res.send(data.analyzeResult.documents[0].fields); console.log(data.analyzeResult.documents[0].fields)})
+                .then((data) => {
+                    res.send(data.analyzeResult.documents[0].fields);
+                    console.log(data.analyzeResult.documents[0].fields)
+                });
         }, 3000);
     }).catch((reason) =>{
         console.log(reason);

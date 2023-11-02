@@ -29,7 +29,6 @@
             let formdata = new FormData();
             formdata.append('image',document.getElementById('image').files[0])
             fetch('/image', {
-
                 method : "post",
                 body : formdata
             }).then((r) => r.json())
@@ -53,7 +52,6 @@
                         })
                     });
                 })
-
         }
     </script>
 </body>
