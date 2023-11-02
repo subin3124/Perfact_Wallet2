@@ -30,15 +30,6 @@ const upload = multer({ storage})
 const client = new ImageAnnotatorClient({
     keyFilename: 'imgtotext-402215-ab70869cba9a.json',
 });
-// MySQL 연결을 위한 풀을 생성
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: dbconfig.host,
-    user: dbconfig.user,
-    password: dbconfig.password,
-    database: dbconfig.database,
-    debug: false
-});
 
 const db = new Database();
 const app = express();
@@ -74,7 +65,7 @@ function insertDB(data) {
 app.get('/excel/:id', async (req, res) => {
     let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
     console.log('1');
-    data = await db.ReadAll('select * from perfect_wallet_DB', db.getInstance());
+    data = await db.ReadAll('select * from perfect_wallet_DB order by date desc', db.getInstance());
     // data = [{item : '라면', qu : 1, cost : 5000}];
     console.log('debug : ' + data);
     const excel = new ExcelJS();

@@ -39,7 +39,8 @@
                     for(let array in res.Items.valueArray) {
                         data.push({objectName: res.Items.valueArray[array].valueObject.Description.content,
                             price: res.Items.valueArray[array].valueObject.TotalPrice.valueNumber,
-                            qu: res.Items.valueArray[array].valueObject.Quantity.valueNumber});
+                            qu: res.Items.valueArray[array].valueObject.Quantity.valueNumber,
+                            date: res.TransactionDate.valueDate});
                     }
                     console.log(data);
                     fetch('/callDB', {

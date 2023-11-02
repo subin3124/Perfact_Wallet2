@@ -20,6 +20,7 @@ class ExcelJS{
   }
   initColumns() {
       this.sheet.columns = [
+          {header: '날짜', key: 'date'},
           {header: '품목', key: 'item'},
           {header: '수량', key: 'qu'},
           {header: '가격', key: 'cost'}
