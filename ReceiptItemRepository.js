@@ -1,8 +1,9 @@
+const DatabaseConnecter = require("./DatabaseConnecter");
 const sqlite = require('sqlite3').verbose();
-class Database{
+class ReceiptItemRepository {
     db;
     constructor() {
-        this.db = new sqlite.Database('data.db', (err) => {if(err) console.error(err.message); console.log('db conncted.');});
+        this.db = new DatabaseConnecter();
     }
     getInstance() {
         return this.db;
@@ -10,7 +11,7 @@ class Database{
     Insert(data) {
         // data = [{item : '라면', qu : 1, cost : 3500}]
         for(let i in data) {
-            this.db.run(`INSERT INTO perfect_wallet_DB (item, qu, cost, date) VALUES ("${data[i].objectName}", ${data[i].qu}, ${data[i].price}, "${data[i].date}")`, (err) => {
+            this.db.run(`INSERT INTO Item (item, qu, cost, ReceiptID) VALUES ("${data[i].objectName}", ${data[i].qu}, ${data[i].price}, ${data[i].ReceiptID}`, (err) => {
                 if(err)
                     console.error(err.message);
                 console.log(`inserted data ${data[i]}`);
@@ -26,4 +27,4 @@ class Database{
         });
     }
 
-}module.exports = Database;
+}module.exports = ReceiptItemRepository;

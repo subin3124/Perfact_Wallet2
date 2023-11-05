@@ -34,27 +34,9 @@
                 method : "post",
                 body : formdata
             }).then((r) => {
-                imgdo.setAttribute('src', r.headers.get('imageUrl'));
-                return r.json()})
+                return r.json();})
                 .then((res) => {
-                    console.log(res);
-                    let data = [];
-                    for(let array in res.Items.valueArray) {
-                        data.push({objectName: res.Items.valueArray[array].valueObject.Description.content,
-                            price: res.Items.valueArray[array].valueObject.TotalPrice.valueNumber,
-                            qu: res.Items.valueArray[array].valueObject.Quantity.valueNumber,
-                            date: res.TransactionDate.valueDate});
-                    }
-                    console.log(data);
-                    fetch('/callDB', {
-                        method: 'post',
-                        headers: {
-                            'content-type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            data : data
-                        })
-                    });
+                    imgdo.setAttribute('src', res.imageUrl);
                 })
         }
     </script>

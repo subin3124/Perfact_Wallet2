@@ -14,7 +14,8 @@ const multer  = require('multer')
 const {response, json} = require("express");
 const {createServer} = require("http");
 const ExcelJS = require("./ExcelJS");
-const Database = require("./Database");
+const ReceiptItemRepository = require("./ReceiptItemRepository");
+const ReceiptRepository = require("./ReceiptRepository");
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -31,7 +32,8 @@ const client = new ImageAnnotatorClient({
     keyFilename: 'imgtotext-402215-ab70869cba9a.json',
 });
 
-const db = new Database();
+const receiptItemRepository = new ReceiptItemRepository();
+const receiptRepository = new ReceiptRepository();
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -45,28 +47,28 @@ app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
     excel.setSheet('one');
     let data = excel.getRows();
     console.log(data);
-    insertDB(data);
+    insertReceiptItem(data);
 });
 
 // DB에서 데이터를 검색하고 클라이언트에 응답
 app.post('/callDB', (req, res) => {
     console.log(req.body.data);
-    insertDB(req.body.data);
+    insertReceiptItem(req.body.data);
     res.send(JSON.stringify({status:'ok'}));
 });
 app.get('/getDB', async (req, res) => {
-    res.send(await db.ReadAll('select * from perfect_wallet_DB', db.getInstance()));
+    res.send(await receiptRepository.ReadAll('select * from Receipt', receiptRepository.getInstance()));
 });
-function insertDB(data) {
+function insertReceiptItem(data) {
     console.log(data);
-    db.Insert(data);
+    receiptItemRepository.Insert(data);
     // 쿼리문
     //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
 }
 app.get('/excel/:id', async (req, res) => {
     let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
     console.log('1');
-    data = await db.ReadAll('select * from perfect_wallet_DB order by date desc', db.getInstance());
+    data = await receiptItemRepository.ReadAll('select * from perfect_wallet_DB order by date desc', db.getInstance());
     // data = [{item : '라면', qu : 1, cost : 5000}];
     console.log('debug : ' + data);
     const excel = new ExcelJS();
@@ -113,12 +115,28 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     console.log(response.body);
                     return response.json()})
                 .then((data) => {
+
                     res.set({
                         'content-type': 'application/json',
                         'imageUrl' : `${url}`
                     });
-                    res.send(data.analyzeResult.documents[0].fields);
+                    let receiptID = `${Date.now()}_ReceiptID${url}`
+                    receiptRepository.Insert({
+                        ID : receiptID,
+                        MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
+                        Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
+                        date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
+                    });
+                    let Itemdata = [];
+                    for(let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
+                        Itemdata.push({objectName: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.Description.content,
+                            price: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.TotalPrice.valueNumber,
+                            qu: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.Quantity.valueNumber,
+                            ReceiptID: receiptID});
+                    }
+                    insertReceiptItem(Itemdata);
                     console.log(data.analyzeResult.documents[0].fields)
+                    res.send({ReceiptID:receiptID,imageUrl:url})
                 });
         }, 3000);
     }).catch((reason) =>{
