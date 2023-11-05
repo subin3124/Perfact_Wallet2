@@ -68,7 +68,7 @@ function insertReceiptItem(data) {
 app.get('/excel/:id', async (req, res) => {
     let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
     console.log('1');
-    data = await receiptItemRepository.ReadAll('select * from perfect_wallet_DB order by date desc', db.getInstance());
+    data = await receiptItemRepository.ReadAll('select * from Item order by ReceiptID', receiptItemRepository.getInstance());
     // data = [{item : '라면', qu : 1, cost : 5000}];
     console.log('debug : ' + data);
     const excel = new ExcelJS();

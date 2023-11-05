@@ -9,10 +9,10 @@ class ReceiptRepository {
         return this.db;
     }
     Insert(data) {
-            this.db.run(`INSERT INTO Item (ReceiptID,StoreName,TotalCost, date) VALUES ("${data.ID}","${data.MarketName}", ${data.Total}, ${data.date}`, (err) => {
+            this.db.run(`INSERT INTO Item (ReceiptID,StoreName,TotalCost, date) VALUES ('${data.ID}','${data.MarketName}', ${data.Total}, ${data.date}`, (err) => {
                 if(err)
                     console.error(err.message);
-                console.log(`inserted data ${data}`);
+                console.log(`inserted data ${data.ID}`);
             });
 
     }
