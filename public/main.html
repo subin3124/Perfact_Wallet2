@@ -35,7 +35,7 @@
                 body : formdata
             }).then((r) => {
                 imgdo.setAttribute('src', r.headers.get('imageUrl'));
-                r.json()})
+                return r.json()})
                 .then((res) => {
                     console.log(res);
                     let data = [];
