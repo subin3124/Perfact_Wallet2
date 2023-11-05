@@ -9,6 +9,7 @@
     <button id="uploadButton" onclick="onUpload()">파일업로드</button>
     <input type="file" id="image" name="image">
     <button id="downloadExcel" onclick="downloadExcel()">엑셀</button>
+    <img src="" id="imageRes"/>
     <script>
         function downloadExcel() {
             fetch('/excel/1', {
@@ -25,6 +26,7 @@
             });
         }
         function onUpload() {
+            let imgdo = document.getElementById('imageRes');
             console.log("test1");
             let formdata = new FormData();
             formdata.append('image',document.getElementById('image').files[0])
@@ -41,6 +43,7 @@
                             qu: res.Items.valueArray[array].valueObject.Quantity.valueNumber,
                             date: res.TransactionDate.valueDate});
                     }
+                   imgdo.setAttribute('src', res.headers.get('imageUrl'));
                     console.log(data);
                     fetch('/callDB', {
                         method: 'post',

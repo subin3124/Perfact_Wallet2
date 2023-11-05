@@ -113,6 +113,10 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     console.log(response.body);
                     return response.json()})
                 .then((data) => {
+                    res.set({
+                        'content-type': 'application/json',
+                        'imageUrl' : `${url}`
+                    });
                     res.send(data.analyzeResult.documents[0].fields);
                     console.log(data.analyzeResult.documents[0].fields)
                 });
