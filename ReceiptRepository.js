@@ -13,6 +13,7 @@ class ReceiptRepository {
                 if(err)
                     console.error(err.message);
                 console.log(`inserted data ${data.ID}`);
+                console.log(`INSERT INTO Item (ReceiptID,StoreName,TotalCost, date) VALUES ('${data.ID}','${data.MarketName}', ${data.Total}, ${data.date}`);
             });
 
     }
