@@ -33,7 +33,9 @@
             fetch('/image', {
                 method : "post",
                 body : formdata
-            }).then((r) => r.json())
+            }).then((r) => {
+                imgdo.setAttribute('src', r.headers.get('imageUrl'));
+                r.json()})
                 .then((res) => {
                     console.log(res);
                     let data = [];
@@ -43,7 +45,6 @@
                             qu: res.Items.valueArray[array].valueObject.Quantity.valueNumber,
                             date: res.TransactionDate.valueDate});
                     }
-                   imgdo.setAttribute('src', res.headers.get('imageUrl'));
                     console.log(data);
                     fetch('/callDB', {
                         method: 'post',
