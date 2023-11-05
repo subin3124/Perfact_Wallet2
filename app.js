@@ -115,12 +115,11 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     console.log(response.body);
                     return response.json()})
                 .then((data) => {
-
                     res.set({
                         'content-type': 'application/json',
                         'imageUrl' : `${url}`
                     });
-                    let receiptID = `${Date.now()}_ReceiptID${url}`
+                    let receiptID = `${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}_${new Date().getHours()}${new Date().getMinutes()}${new Date().getMilliseconds()}`
                     receiptRepository.Insert({
                         ID : receiptID,
                         MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
