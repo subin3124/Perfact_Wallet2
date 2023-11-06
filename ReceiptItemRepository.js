@@ -21,10 +21,16 @@ class ReceiptItemRepository {
     async ReadAll(query,db){
         return new Promise(function(resolve,reject){
             db.all(query, function(err,rows){
-                if(err){return reject(err);}
+                if(err){
+                    return reject(err);
+                }
                 resolve(rows);
             });
         });
+    }
+    async getItemByReceiptID(receiptID) {
+        let data = await this.ReadAll(`select * from Item where ReceiptID = '${receiptID}'`);
+        return data;
     }
 
 }module.exports = ReceiptItemRepository;

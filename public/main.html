@@ -34,9 +34,12 @@
                 method : "post",
                 body : formdata
             }).then((r) => {
+                if(!r.ok)
+                    alert("오류가 발생했습니다.\n response code : "+r.status)
                 return r.json();})
                 .then((res) => {
                     imgdo.setAttribute('src', res.imageUrl);
+                    console.log(res);
                 })
         }
     </script>

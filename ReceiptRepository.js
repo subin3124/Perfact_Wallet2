@@ -25,4 +25,12 @@ class ReceiptRepository {
             });
         });
     }
+    async getReceiptByDate(date) {
+        let data = await this.ReadAll(`select * from Receipt where date = '${date}'`);
+        return data;
+    }
+    async getReceiptByID(date) {
+        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${date}'`);
+        return data;
+    }
 }module.exports = ReceiptRepository;
