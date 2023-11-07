@@ -65,12 +65,21 @@ function insertReceiptItem(data) {
     // 쿼리문
     //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
 }
-app.get('/excel/:id', async (req, res) => {
-    let data = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
+app.get('/excel/:ReceiptID', async (req, res) => {
+    let data3 = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
+    let data = [];
     console.log('1');
-    data = await receiptItemRepository.ReadAll('select * from Item order by ReceiptID', receiptItemRepository.getInstance());
-    // data = [{item : '라면', qu : 1, cost : 5000}];
+    let data2 = await receiptRepository.getReceiptByID(req.param('ReceiptID'));
+    data3 = await receiptItemRepository.getItemsByReceiptID('ReceiptID');
     console.log('debug : ' + data);
+    for(let dt in data3) {
+        data.push({
+            date:data2.date,
+            item:data3.item,
+            qu:data3.qu,
+            cost:data3.cost
+        });
+    }
     const excel = new ExcelJS();
     excel.addWorkSheet('workSheet1');
     excel.setSheet('workSheet1');

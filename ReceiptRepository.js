@@ -28,8 +28,8 @@ class ReceiptRepository {
         let data = await this.ReadAll(`select * from Receipt where date = '${date}'`);
         return data;
     }
-    async getReceiptByID(date) {
-        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${date}'`);
+    async getReceiptByID(id) {
+        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${id}'`);
         return data;
     }
 }module.exports = ReceiptRepository;
