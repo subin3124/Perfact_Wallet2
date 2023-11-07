@@ -129,7 +129,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                         MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
                         Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
                         imageSrc: url,
-                        date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
+                        date: data.analyzeResult.documents[0].fields.TransactionDate.content
                     });
                     let Itemdata = [];
                     for(let array in data.analyzeResult.documents[0].fields.Items.valueArray) {

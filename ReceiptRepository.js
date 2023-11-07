@@ -15,7 +15,6 @@ class ReceiptRepository {
                 console.log(`inserted data ${data.ID}`);
                 console.log(`INSERT INTO Receipt (ReceiptID,StoreName,TotalCost, date) VALUES ('${data.ID}','${data.MarketName}', ${data.Total}, ${data.date})`);
             });
-
     }
     async ReadAll(query,db){
         return new Promise(function(resolve,reject){
