@@ -80,7 +80,8 @@ app.get('/excel/:id', async (req, res) => {
     workbook.xlsx.write(res).then((r) => res.end());
 });
 app.get('/Receipt/Item/:ReceiptID', (req, res) => {
-   req.param
+   let recID = req.param('ReceiptID');
+   res.send(receiptItemRepository.getItemsByReceiptID(recID));
 });
 app.post('/image',upload.single('image'),(req, res)=> {
     console.log(req.file)
