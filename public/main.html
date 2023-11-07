@@ -16,7 +16,7 @@
             if(ReceiptID == null)
                 alert("업로드 된 영수증이 없습니다.");
             else {
-                fetch('/excel/1', {
+                fetch(`/excel/${ReceiptID}`, {
                     method: "GET",
                 }).then((res) => res.blob())
                     .then((data) => {

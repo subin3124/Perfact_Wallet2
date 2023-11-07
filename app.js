@@ -71,7 +71,7 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     console.log('1');
     let data2 = await receiptRepository.getReceiptByID(req.param('ReceiptID'));
     data3 = await receiptItemRepository.getItemsByReceiptID('ReceiptID');
-    console.log('debug : ' + data);
+    console.log('tes'+data3.item+','+data2.date)
     for(let dt in data3) {
         data.push({
             date:data2.date,
@@ -80,6 +80,7 @@ app.get('/excel/:ReceiptID', async (req, res) => {
             cost:data3.cost
         });
     }
+    console.log('debug : ' + data);
     const excel = new ExcelJS();
     excel.addWorkSheet('workSheet1');
     excel.setSheet('workSheet1');
