@@ -25,11 +25,11 @@ class ReceiptRepository {
         });
     }
     async getReceiptByDate(date) {
-        let data = await this.ReadAll(`select * from Receipt where date = '${date}'`);
+        let data = await this.ReadAll(`select * from Receipt where date = '${date}'`,this.db);
         return data;
     }
     async getReceiptByID(id) {
-        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${id}'`);
+        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${id}'`.this.db);
         return data;
     }
 }module.exports = ReceiptRepository;
