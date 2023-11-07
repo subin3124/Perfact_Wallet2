@@ -29,7 +29,7 @@ class ReceiptRepository {
         return data;
     }
     async getReceiptByID(id) {
-        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${id}'`.this.db);
+        let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${id}'`, this.db);
         return data;
     }
 }module.exports = ReceiptRepository;
