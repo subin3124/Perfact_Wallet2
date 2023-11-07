@@ -31,7 +31,6 @@ const upload = multer({ storage})
 const client = new ImageAnnotatorClient({
     keyFilename: 'imgtotext-402215-ab70869cba9a.json',
 });
-
 const receiptItemRepository = new ReceiptItemRepository();
 const receiptRepository = new ReceiptRepository();
 const app = express();
@@ -72,11 +71,10 @@ function insertReceiptItem(data) {
     //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
 }
 app.get('/excel/:ReceiptID', async (req, res) => {
-    let data3 = []; //db 호출 후 여기다 데이터 집어넣을 것.  [{item : '라면', qu : 1, cost : 5000}] (반드시 array형태일것)
     let data = [];
     console.log('1');
     let data2 = await receiptRepository.getReceiptByID(req.param('ReceiptID'));
-    data3 = await receiptItemRepository.getItemsByReceiptID(req.param('ReceiptID'));
+    let data3 = await receiptItemRepository.getItemsByReceiptID(req.param('ReceiptID'));
     console.log('tes'+data3+','+data2)
     for(let dt in data3) {
         data.push({
