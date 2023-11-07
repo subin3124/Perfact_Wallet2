@@ -71,7 +71,7 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     console.log('1');
     let data2 = await receiptRepository.getReceiptByID(req.param('ReceiptID'));
     data3 = await receiptItemRepository.getItemsByReceiptID(req.param('ReceiptID'));
-    console.log('tes'+data3.item+','+data2.date)
+    console.log('tes'+data3+','+data2)
     for(let dt in data3) {
         data.push({
             date:data2.date,
@@ -89,9 +89,9 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     let workbook = excel.getWorkbook()
     workbook.xlsx.write(res).then((r) => res.end());
 });
-app.get('/Receipt/Item/:ReceiptID', (req, res) => {
-   let recID = req.param('ReceiptID');
-   res.send(receiptItemRepository.getItemsByReceiptID(recID));
+app.get('/Receipt/Item/:ReceiptID', async (req, res) => {
+    let recID = req.param('ReceiptID');
+    res.send(await receiptItemRepository.getItemsByReceiptID(recID));
 });
 app.post('/image',upload.single('image'),(req, res)=> {
     console.log(req.file)
