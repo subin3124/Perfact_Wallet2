@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="date" id="date"/>
+<div id="main"></div>
+<script>
+    function load() {
+        fetch(`/Receipt/date/${document.getElementById('date').value}`, {
+            method : "get"
+        }).then((r) => {
+            if(!r.ok)
+                alert("오류가 발생했습니다.\n response code : "+r.status)
+            return r.json();})
+            .then((res) => {
+                for(let idx in res) {
+                    let padivobj = document.getElementById('main');
+                    let divobj = document.createElement('div');
+                    let imgobj = document.createElement('img');
+                    imgobj.setAttribute('src',res[idx].imageSrc);
+                    divobj.setAttribute('draggable','true');
+                    divobj.setAttribute('ondrop','event()');
+                    divobj.setAttribute('id',res[idx].ReceiptID);
+                    divobj.appendChild(imgobj);
+                    padivobj.appendChild(divobj);
+                }
+            })
+    }
+    function ReciptSaveOnDrop(event) {
+        console.log(event.target.id);
+        fetch(`/Receipt/id/${event.target.id}`, {
+            method : "get"
+        }).then((r) => {
+            if(!r.ok)
+                alert("오류가 발생했습니다.\n response code : "+r.status);
+            return r.json();
+        }).then((res) => {
+           console.log(res[0].StoreName);
+        });
+    }
+</script>
+</body>
+</html>

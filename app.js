@@ -59,6 +59,12 @@ app.post('/callDB', (req, res) => {
 app.get('/getDB', async (req, res) => {
     res.send(await receiptRepository.ReadAll('select * from Receipt', receiptRepository.getInstance()));
 });
+app.get('/Receipt/date/:dat', async (req, res) => {
+    res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
+});
+app.get('/Receipt/id/:id', async (req, res) => {
+    res.send(await receiptRepository.getReceiptByID(req.param('id')));
+});
 function insertReceiptItem(data) {
     console.log(data);
     receiptItemRepository.Insert(data);
@@ -74,10 +80,10 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     console.log('tes'+data3+','+data2)
     for(let dt in data3) {
         data.push({
-            date:data2.date,
-            item:data3.item,
-            qu:data3.qu,
-            cost:data3.cost
+            date:data2[dt].date,
+            item:data3[dt].item,
+            qu:data3[dt].qu,
+            cost:data3[dt].cost
         });
     }
     console.log('debug : ' + data);
