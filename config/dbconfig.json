@@ -1,7 +1,7 @@
 {
-    "host": "inugyo.c1juzjfbdszy.ap-northeast-2.rds.amazonaws.com",
+    "host": "skh",
     "user": "root",
     "password": "song1201*",
-    "database": "Perfect_wallet_DB",
+    "database": "Perfect_wallet",
     "port": 3306
 }

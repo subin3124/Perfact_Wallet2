@@ -1,53 +1,556 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <button id="uploadButton" onclick="onUpload()">파일업로드</button>
-    <input type="file" id="image" name="image">
-    <button id="downloadExcel" onclick="downloadExcel()">엑셀</button>
-    <img src="" id="imageRes"/>
-    <script>
-        let ReceiptID = null;
-        function downloadExcel() {
-            if(ReceiptID == null)
-                alert("업로드 된 영수증이 없습니다.");
-            else {
-                fetch(`/excel/${ReceiptID}`, {
-                    method: "GET",
-                }).then((res) => res.blob())
-                    .then((data) => {
-                        const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-                        const url = window.URL.createObjectURL(blob);
-                        const anchor = document.createElement('a');
-                        anchor.href = url;
-                        anchor.download = `테스트.xlsx`;
-                        anchor.click();
-                        window.URL.revokeObjectURL(url);
-                    });
-            }
-        }
-        function onUpload() {
-            let imgdo = document.getElementById('imageRes');
-            console.log("test1");
-            let formdata = new FormData();
-            formdata.append('image',document.getElementById('image').files[0])
-            fetch('/image', {
-                method : "post",
-                body : formdata
-            }).then((r) => {
-                if(!r.ok)
-                    alert("오류가 발생했습니다.\n response code : "+r.status)
-                return r.json();})
-                .then((res) => {
-                    imgdo.setAttribute('src', res.imageUrl);
-                    ReceiptID = res.ReceiptID;
-                    console.log(res);
-                })
-        }
-    </script>
-</body>
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title></title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper-->
+			<div id="wrapper">
+
+				<!-- Nav -->
+					<nav id="nav">
+						<a href="#" class="icon solid fa-home"><span>Home</span></a>
+						<a href="#work" class="icon solid fa-folder"><span>Work</span></a>
+						<a href="#whiteboard" class="icon solid fa-envelope"><span>Contact</span></a>
+
+						<button onclick="showLoginPopup()" id="loginButton">로그인</button>
+						<button onclick="showSignupPopup()" id="signupButton">회원가입</button>
+						<label id="userName"></label>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Me -->
+							<article id="home" class="panel">
+								<div class="main_info">
+									<div class="team-info">
+										<label id="teamName">만점지갑</label>
+										<label id="introdution">나만의 가계부</label>
+									</div>
+									<div class="image">
+										<img src="sample1.jpg" id="introImage">
+									</div>
+								</div>
+							</article>
+
+						<!-- Work -->
+							<article id="work" class="panel">
+								<div>
+									<button id="uploadButton" onclick="onUpload()">파일업로드</button>
+									<input type="file" id="image" name="image">
+									<button id="downloadExcel" onclick="downloadExcel()">엑셀</button>
+									<img src="" id="imageRes"/>
+								</div>
+								<div>
+									<table class="Calendar">
+										<thead>
+											<tr>
+												<td onClick="prevCalendar();" style="cursor:pointer;">&#60;</td>
+												<td colspan="5">
+													<span id="calYear"></span>년
+													<span id="calMonth"></span>월
+												</td>
+												<td onClick="nextCalendar();" style="cursor:pointer;">&#62;</td>
+											</tr>
+											<tr>
+												<td>일</td>
+												<td>월</td>
+												<td>화</td>
+												<td>수</td>
+												<td>목</td>
+												<td>금</td>
+												<td>토</td>
+											</tr>
+										</thead>
+							
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+								
+							</article>
+
+						<!-- Contact -->
+							<article id="whiteboard" class="panel">
+								<!-- <div id="whiteboard"></div> -->
+								<button id="addImageBtn">이미지 추가</button>
+								<button id="addTextButton">텍스트 추가</button>
+								<select id="fontSizeSelect">
+									<!--
+									<option value="8">8px</option>
+									<option value="9">9px</option>
+									<option value="10">10px</option>
+									<option value="11">11px</option>
+									<option value="12">12px</option>
+									<option value="14">14px</option>
+									<option value="16">16px</option>
+									<option value="18">18px</option>
+									<option value="20">20px</option>
+									<option value="22">22px</option>
+									-->
+									<option value="24">24px</option>
+									<option value="26">26px</option>
+									<option value="28">28px</option>
+									<option value="36">36px</option>
+									<option value="48">48px</option>
+									<option value="60">60px</option>
+									<option value="72">72px</option>
+									<option value="84">84px</option>
+									<option value="96">96px</option>
+								</select>
+								<input type="color" id="textColorPicker" value="#000000">
+								<input type="date" id="date" onchange="load()"/>
+								
+							</article>
+
+					</div>
+
+				
+
+			</div>
+
+			<!-- 로그인 팝업 내용 -->
+			<div id="loginPopup" class="popup">
+				<div class="popup-content">
+					<h2>로그인</h2> <br>
+					<input type="text" placeholder="ID를 입력하세요." id="loginUsername"> <br>
+					<input type="password" placeholder="비밀번호를 입력하세요." id="loginPassword"> <br>
+					<button onclick="closePopup('loginPopup'); clearLoginFields()" id="loginButton">로그인</button>
+				</div>
+			</div>
+
+			<!-- 회원가입 팝업 내용 -->
+			<div id="signupPopup" class="popup">
+				<div class="popup-content">
+					<h2>회원가입</h2> <br>
+					<label>ID</label> <br>
+					<input type="text" id="signupUsername"> <br>
+					<label>비밀번호</label> <br>
+					<input type="password" id="signupPassword"> <br>
+					<label>비밀번호 확인</label> <br>
+					<input type="password" id="signupPassword_again"> <br>
+					<button onclick="closePopup('signupPopup'); clearSignupFields()" id="signupButton">확인</button>
+				</div>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+			<script>
+				// 팝업 열기 함수
+				function showPopup(popupId) {
+					var popup = document.getElementById(popupId);
+					popup.style.display = "block";
+				}
+
+				// 팝업 닫기 함수
+				function closePopup(popupId) {
+					var popup = document.getElementById(popupId);
+					popup.style.display = "none";
+				}
+
+				// 로그인 입력 필드 초기화 함수
+				function clearLoginFields() {
+					let a = document.getElementById("loginUsername").value;
+					document.getElementById("userName").innerText = a;
+					document.getElementById("loginButton").remove();
+					document.getElementById("signupButton").remove();
+				}
+
+				// 회원가입 입력 필드 초기화 함수
+				function clearSignupFields() {
+					document.getElementById("signupUsername").value = "";
+					document.getElementById("signupPassword").value = "";
+					document.getElementById("signupPassword_again").value = "";
+				}
+
+				function showLoginPopup() {
+					showPopup('loginPopup');
+				}
+
+				function showSignupPopup() {
+					showPopup('signupPopup');
+				}
+
+
+
+
+				window.onload = function () { buildCalendar(); }
+
+				let nowMonth = new Date();
+				let today = new Date();
+				today.setHours(0, 0, 0, 0);
+
+				function buildCalendar() {
+
+					let firstDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth(), 1);
+					let lastDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, 0);
+
+					let tbody_Calendar = document.querySelector(".Calendar > tbody");
+					document.getElementById("calYear").innerText = nowMonth.getFullYear();
+					document.getElementById("calMonth").innerText = leftPad(nowMonth.getMonth() + 1);
+
+					while (tbody_Calendar.rows.length > 0) {
+						tbody_Calendar.deleteRow(tbody_Calendar.rows.length - 1);
+					}
+
+					let nowRow = tbody_Calendar.insertRow();
+
+					for (let j = 0; j < firstDate.getDay(); j++) {
+						let nowColumn = nowRow.insertCell();
+					}
+
+					for (let nowDay = firstDate; nowDay <= lastDate; nowDay.setDate(nowDay.getDate() + 1)) {
+
+						let nowColumn = nowRow.insertCell();
+
+						let newDIV = document.createElement("p");
+						newDIV.innerHTML = leftPad(nowDay.getDate());
+						nowColumn.appendChild(newDIV);
+
+						if (nowDay.getDay() == 6) {
+							nowRow = tbody_Calendar.insertRow();
+						}
+
+						if (nowDay < today) {
+							newDIV.className = "pastDay";
+							newDIV.onclick = function () { choiceDate(this); }
+						}
+						else if (nowDay.getFullYear() == today.getFullYear() && nowDay.getMonth() == today.getMonth() && nowDay.getDate() == today.getDate()) { // 오늘인 경우           
+							newDIV.className = "today";
+							newDIV.onclick = function () { choiceDate(this); }
+						}
+						else {
+							newDIV.className = "futureDay";
+							newDIV.onclick = function () { choiceDate(this); }
+						}
+					}
+				}
+
+				// 날짜 선택
+				function choiceDate(newDIV) {
+					if (document.getElementsByClassName("choiceDay")[0]) {
+						document.getElementsByClassName("choiceDay")[0].classList.remove("choiceDay");
+					}
+					newDIV.classList.add("choiceDay");
+
+					newDIV.addEventListener("dblclick", function () {
+						const selectedDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth(), parseInt(newDIV.textContent));
+						const formattedDate = `${selectedDate.getFullYear()}-${leftPad(selectedDate.getMonth() + 1)}-${leftPad(selectedDate.getDate())}`;
+						console.log(formattedDate); 
+					});
+				}
+
+				// 이전달 버튼 클릭
+				function prevCalendar() {
+					nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() - 1, nowMonth.getDate());
+					buildCalendar();
+				}
+				// 다음달 버튼 클릭
+				function nextCalendar() {
+					nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, nowMonth.getDate());
+					buildCalendar();
+				}
+
+				function leftPad(value) {
+					if (value < 10) {
+						value = "0" + value;
+						return value;
+					}
+					return value;
+				}
+
+
+
+
+				const whiteboard = document.getElementById('whiteboard');
+				const addImageBtn = document.getElementById('addImageBtn');
+				const addTextButton = document.getElementById('addTextButton');
+				const fontSizeSelect = document.getElementById('fontSizeSelect');
+				const textColorPicker = document.getElementById('textColorPicker');
+
+				let selectedText = null;
+				let selectedImage = null;
+				let offsetX, offsetY, isDragging = false;
+
+				// 이미지 추가
+				addImageBtn.addEventListener('click', () => {
+					const input = document.createElement('input');
+					input.type = 'file';
+					input.accept = 'image/*';
+					input.style.display = 'none';
+
+					input.addEventListener('change', (event) => {
+						const file = event.target.files[0];
+						if (file) {
+							const imageURL = URL.createObjectURL(file);
+							addImage(imageURL);
+						}
+					});
+
+					whiteboard.appendChild(input);
+					input.click();
+				});
+
+				function addImage(imageURL) {
+					const imgElement = document.createElement('img');
+					imgElement.src = imageURL;
+					imgElement.style.position = 'absolute';
+					imgElement.style.left = '100px';
+					imgElement.style.top = '150px';
+					imgElement.style.width = '200px';
+					imgElement.style.height = '150px';
+					imgElement.style.cursor = 'grab';
+
+					imgElement.addEventListener('mousedown', function (event) {
+						selectedImage = imgElement;
+						const startX = event.clientX;
+						const startY = event.clientY;
+						const startLeft = parseFloat(imgElement.style.left);
+						const startTop = parseFloat(imgElement.style.top);
+						document.onmousemove = function (event) {
+							const diffX = event.clientX - startX;
+							const diffY = event.clientY - startY;
+							imgElement.style.left = startLeft + diffX + 'px';
+							imgElement.style.top = startTop + diffY + 'px';
+						};
+						document.onmouseup = function () {
+							document.onmousemove = null;
+							document.onmouseup = null;
+						};
+					});
+
+					imgElement.addEventListener('click', function () {
+						if (selectedImage) {
+							selectedImage.style.border = "none";
+						}
+						if (selectedText) {
+							selectedText.style.border = "none";
+						}
+						selectedImage = imgElement;
+						selectedText = null;
+
+						imgElement.style.border = "2px dotted black";
+					});
+					imgElement.setAttribute('data-type', 'image');
+
+					whiteboard.appendChild(imgElement);
+				}
+
+				// 이미지 크기 조절
+				let isCtrlPressed = false;
+
+				document.addEventListener('keydown', function (event) {
+					if (event.key === 'Control') {
+						isCtrlPressed = true;
+					}
+				});
+
+				document.addEventListener('keyup', function (event) {
+					if (event.key === 'Control') {
+						isCtrlPressed = false;
+					}
+				});
+
+				document.addEventListener('keydown', function (event) {
+					if (selectedImage) {
+						const step = isCtrlPressed ? 10 : 1;
+
+						if (event.key === 'ArrowUp') {
+							const currentWidth = parseInt(selectedImage.style.width, 10);
+							const currentHeight = parseInt(selectedImage.style.height, 10);
+
+							const newWidth = currentWidth + step;
+							const newHeight = (currentHeight / currentWidth) * newWidth;
+
+							selectedImage.style.width = newWidth + 'px';
+							selectedImage.style.height = newHeight + 'px';
+						} else if (event.key === 'ArrowDown') {
+							const currentWidth = parseInt(selectedImage.style.width, 10);
+							const currentHeight = parseInt(selectedImage.style.height, 10);
+
+							if (currentWidth > step) {
+								const newWidth = currentWidth - step;
+								const newHeight = (currentHeight / currentWidth) * newWidth;
+
+								selectedImage.style.width = newWidth + 'px';
+								selectedImage.style.height = newHeight + 'px';
+							}
+						}
+					}
+				});
+
+				// 텍스트 추가
+				addTextButton.addEventListener('click', function () {
+					addText("텍스트");
+				});
+				function addText(text) {
+					const textElement = document.createElement('div');
+					textElement.innerText = text;
+					textElement.contentEditable = true;
+					textElement.style.position = 'absolute';
+					textElement.style.left = '100px';
+					textElement.style.top = '150px';
+					textElement.style.fontSize = fontSizeSelect.value + 'px';
+					textElement.style.fontFamily = 'customFont';
+					textElement.style.color = textColorPicker.value;
+
+					textElement.addEventListener('mousedown', function (event) {
+						selectedText = textElement;
+						const startX = event.clientX;
+						const startY = event.clientY;
+						const startLeft = parseFloat(textElement.style.left);
+						const startTop = parseFloat(textElement.style.top);
+						document.onmousemove = function (event) {
+							const diffX = event.clientX - startX;
+							const diffY = event.clientY - startY;
+							textElement.style.left = startLeft + diffX + 'px';
+							textElement.style.top = startTop + diffY + 'px';
+						};
+						document.onmouseup = function () {
+							document.onmousemove = null;
+							document.onmouseup = null;
+						};
+					});
+
+					textElement.addEventListener('click', function () {
+						if (selectedImage) {
+							selectedImage.style.border = "none";
+							selectedImage = null;
+						}
+						if (selectedText && selectedText !== textElement) {
+							selectedText.style.border = "none";
+						}
+					});
+
+					textElement.setAttribute('data-type', 'text');
+
+					whiteboard.appendChild(textElement);
+				}
+
+				// 텍스트 폰트 사이즈
+				fontSizeSelect.addEventListener('change', function () {
+					if (selectedText) {
+						selectedText.style.fontSize = fontSizeSelect.value + 'px';
+					}
+				});
+
+				// 텍스트 색깔
+				textColorPicker.addEventListener('change', function () {
+					if (selectedText) {
+						selectedText.style.color = textColorPicker.value;
+					}
+				});
+
+
+				// 이미지 및 텍스트 삭제
+				document.addEventListener('keydown', function (event) {
+					if (event.key === 'Delete') {
+						if (selectedImage && selectedImage.getAttribute('data-type') === 'image') {
+							whiteboard.removeChild(selectedImage);
+							selectedImage = null;
+						}
+						if (selectedText && selectedText.getAttribute('data-type') === 'text') {
+							whiteboard.removeChild(selectedText);
+							selectedText = null;
+						}
+					}
+				});
+
+				document.addEventListener('click', function (event) {
+					if (event.target !== selectedImage && event.target !== selectedText) {
+						if (selectedImage) {
+							selectedImage.style.border = "none";
+							selectedImage = null;
+						}
+					}
+				});
+
+
+				// 김수빈
+				let ReceiptID = null;
+				function downloadExcel() {
+					if(ReceiptID == null)
+						alert("업로드 된 영수증이 없습니다.");
+					else {
+						fetch(`/excel/${ReceiptID}`, {
+							method: "GET",
+						}).then((res) => res.blob())
+							.then((data) => {
+								const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+								const url = window.URL.createObjectURL(blob);
+								const anchor = document.createElement('a');
+								anchor.href = url;
+								anchor.download = `테스트.xlsx`;
+								anchor.click();
+								window.URL.revokeObjectURL(url);
+							});
+					}
+				}
+				function onUpload() {
+					let imgdo = document.getElementById('imageRes');
+					console.log("test1");
+					let formdata = new FormData();
+					formdata.append('image',document.getElementById('image').files[0])
+					fetch('/image', {
+						method : "post",
+						body : formdata
+					}).then((r) => {
+						if(!r.ok)
+							alert("오류가 발생했습니다.\n response code : "+r.status)
+						return r.json();})
+						.then((res) => {
+							imgdo.setAttribute('src', res.imageUrl);
+							ReceiptID = res.ReceiptID;
+							console.log(res);
+						})
+				}
+
+
+				//
+				function load() {
+				fetch(`/Receipt/date/${document.getElementById('date').value}`, {
+					method : "get"
+				}).then((r) => {
+					if(!r.ok)
+						alert("오류가 발생했습니다.\n response code : "+r.status)
+					return r.json();})
+					.then((res) => {
+						for(let idx in res) {
+							let padivobj = document.getElementById('main');
+							let divobj = document.createElement('div');
+							let imgobj = document.createElement('img');
+							imgobj.setAttribute('src',res[idx].imageSrc);
+							divobj.setAttribute('draggable','true');
+							divobj.setAttribute('ondrop','event()');
+							divobj.setAttribute('id',res[idx].ReceiptID);
+							divobj.appendChild(imgobj);
+							padivobj.appendChild(divobj);
+						}
+					})
+				}
+				function ReciptSaveOnDrop(event) {
+					console.log(event.target.id);
+					fetch(`/Receipt/id/${event.target.id}`, {
+						method : "get"
+					}).then((r) => {
+						if(!r.ok)
+							alert("오류가 발생했습니다.\n response code : "+r.status);
+						return r.json();
+					}).then((res) => {
+					console.log(res[0].StoreName);
+					});
+				}
+			</script>
+	</body>
 </html>
