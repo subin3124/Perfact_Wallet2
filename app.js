@@ -79,6 +79,9 @@ app.get('/excel/:id', async (req, res) => {
     let workbook = excel.getWorkbook()
     workbook.xlsx.write(res).then((r) => res.end());
 });
+app.get('/Receipt/Item/:ReceiptID', (req, res) => {
+   req.param
+});
 app.post('/image',upload.single('image'),(req, res)=> {
     console.log(req.file)
    /* const detectText = async (selectImage) => {
@@ -124,6 +127,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                         ID : receiptID,
                         MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
                         Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
+                        imageSrc: url,
                         date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
                     });
                     let Itemdata = [];

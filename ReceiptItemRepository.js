@@ -28,7 +28,7 @@ class ReceiptItemRepository {
             });
         });
     }
-    async getItemByReceiptID(receiptID) {
+    async getItemsByReceiptID(receiptID) {
         let data = await this.ReadAll(`select * from Item where ReceiptID = '${receiptID}'`);
         return data;
     }
