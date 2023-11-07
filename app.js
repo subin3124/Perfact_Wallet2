@@ -70,7 +70,7 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     let data = [];
     console.log('1');
     let data2 = await receiptRepository.getReceiptByID(req.param('ReceiptID'));
-    data3 = await receiptItemRepository.getItemsByReceiptID('ReceiptID');
+    data3 = await receiptItemRepository.getItemsByReceiptID(req.param('ReceiptID'));
     console.log('tes'+data3.item+','+data2.date)
     for(let dt in data3) {
         data.push({
@@ -139,7 +139,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                         MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
                         Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
                         imageSrc: url,
-                        date: data.analyzeResult.documents[0].fields.TransactionDate.content
+                        date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
                     });
                     let Itemdata = [];
                     for(let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
