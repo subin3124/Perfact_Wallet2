@@ -80,7 +80,7 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     console.log('tes'+data3+','+data2)
     for(let dt in data3) {
         data.push({
-            date:data2[dt].date,
+            date:data2[0].date,
             item:data3[dt].item,
             qu:data3[dt].qu,
             cost:data3[dt].cost
