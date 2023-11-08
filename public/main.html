@@ -527,15 +527,7 @@
 					return r.json();})
 					.then((res) => {
 						for(let idx in res) {
-							let padivobj = document.getElementById('main');
-							let divobj = document.createElement('div');
-							let imgobj = document.createElement('img');
-							imgobj.setAttribute('src',res[idx].imageSrc);
-							divobj.setAttribute('draggable','true');
-							divobj.setAttribute('ondrop','event()');
-							divobj.setAttribute('id',res[idx].ReceiptID);
-							divobj.appendChild(imgobj);
-							padivobj.appendChild(divobj);
+							addImage(res[idx].imageSrc);
 						}
 					})
 				}
