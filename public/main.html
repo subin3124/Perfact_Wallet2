@@ -294,7 +294,7 @@
 						const file = event.target.files[0];
 						if (file) {
 							const imageURL = URL.createObjectURL(file);
-							addImage(imageURL);
+							addImage(imageURL,'object');
 						}
 					});
 
@@ -302,7 +302,7 @@
 					input.click();
 				});
 
-				function addImage(imageURL) {
+				function addImage(imageURL,Type) {
 					const imgElement = document.createElement('img');
 					imgElement.src = imageURL;
 					imgElement.style.position = 'absolute';
@@ -310,6 +310,10 @@
 					imgElement.style.top = '150px';
 					imgElement.style.width = '200px';
 					imgElement.style.height = '150px';
+					if(Type==='Receipt'){
+						imgElement.style.width = '300px';
+						imgElement.style.height = '350px';
+					}
 					imgElement.style.cursor = 'grab';
 
 					imgElement.addEventListener('mousedown', function (event) {
@@ -510,7 +514,6 @@
 							alert("오류가 발생했습니다.\n response code : "+r.status)
 						return r.json();})
 						.then((res) => {
-							imgdo.setAttribute('src', res.imageUrl);
 							ReceiptID = res.ReceiptID;
 							console.log(res);
 						})
@@ -527,7 +530,7 @@
 					return r.json();})
 					.then((res) => {
 						for(let idx in res) {
-							addImage(res[idx].imageSrc);
+							addImage(res[idx].imageSrc,'Receipt');
 						}
 					})
 				}
