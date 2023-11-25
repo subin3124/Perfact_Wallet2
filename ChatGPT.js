@@ -4,7 +4,7 @@
 async function requestGPT(text) {
     const OpenAI = require('openai');
     const openai = new OpenAI({
-        apiKey: "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",
+        apiKey: process.env.OPENAI_API_KEY,
     });
     const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",

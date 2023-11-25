@@ -125,7 +125,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': `${azureconfig.key}`
+            'Ocp-Apim-Subscription-Key': `${process.env.azure}`
         },
         body: `{'urlSource': '${url}'}`
     }).
@@ -136,7 +136,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
         setTimeout(function() {
             fetch(url2, {
                 headers: {
-                    'Ocp-Apim-Subscription-Key': `${azureconfig.key}`
+                    'Ocp-Apim-Subscription-Key': `${process.env.azure}`
                 }
             })  .then((response) => {
                     console.log(response.status);
