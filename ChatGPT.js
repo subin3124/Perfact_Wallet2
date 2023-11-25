@@ -15,14 +15,6 @@ async function requestGPT(text) {
             },
             {
                 "role": "user",
-                "content": "농후토리소바"
-            },
-            {
-                "role": "assistant",
-                "content": "음식"
-            },
-            {
-                "role": "user",
                 "content": "연필"
             },
             {
