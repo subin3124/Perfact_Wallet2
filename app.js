@@ -63,6 +63,7 @@ app.get('/Receipt/date/:dat', async (req, res) => {
 });
 app.post('/Receipt/RedPen/', async (req, res) => {
     let data = req.data;
+    console.log('debug : '+data);
     let listReceipts = [];
     let listItems = [];
     let TotalCost = 0;
@@ -92,10 +93,10 @@ app.post('/Receipt/RedPen/', async (req, res) => {
 app.get('/Receipt/id/:id', async (req, res) => {
     res.send(await receiptRepository.getReceiptByID(req.param('id')));
 });
-function insertReceiptItem(data) {
+async function insertReceiptItem(data) {
     console.log(data);
-    for(let i in data) {
-       data[i].category = chatGPT(data[i].objectName);
+    for (let i in data) {
+        data[i].category = await chatGPT(data[i].objectName);
     }
     receiptItemRepository.Insert(data);
     // 쿼리문
@@ -163,29 +164,31 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     console.log(response.status);
                     console.log(response.body);
                     return response.json()})
-                .then((data) => {
+                .then(async (data) => {
                     res.set({
                         'content-type': 'application/json',
-                        'imageUrl' : `${url}`
+                        'imageUrl': `${url}`
                     });
                     let receiptID = `${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${new Date().getHours()}${new Date().getMinutes()}${new Date().getMilliseconds()}`
                     receiptRepository.Insert({
-                        ID : receiptID,
+                        ID: receiptID,
                         MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
                         Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
                         imageSrc: url,
                         date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
                     });
                     let Itemdata = [];
-                    for(let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
-                        Itemdata.push({objectName: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.Description.content,
+                    for (let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
+                        Itemdata.push({
+                            objectName: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.Description.content,
                             price: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.TotalPrice.valueNumber,
                             qu: data.analyzeResult.documents[0].fields.Items.valueArray[array].valueObject.Quantity.valueNumber,
-                            ReceiptID: receiptID});
+                            ReceiptID: receiptID
+                        });
                     }
-                    insertReceiptItem(Itemdata);
+                    await insertReceiptItem(Itemdata);
                     console.log(data.analyzeResult.documents[0].fields)
-                    res.send({ReceiptID:receiptID,imageUrl:url})
+                    res.send({ReceiptID: receiptID, imageUrl: url})
                 });
         }, 3000);
     }).catch((reason) =>{
