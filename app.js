@@ -16,6 +16,7 @@ const {createServer} = require("http");
 const ExcelJS = require("./ExcelJS");
 const ReceiptItemRepository = require("./ReceiptItemRepository");
 const ReceiptRepository = require("./ReceiptRepository");
+const chatGPT = require('./ChatGPT');
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -61,14 +62,21 @@ app.get('/getDB', async (req, res) => {
 app.get('/Receipt/date/:dat', async (req, res) => {
     res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
 });
-app.post('/Receipt/RedPen/', (req, res) => {
+app.post('/Receipt/RedPen/', async (req, res) => {
     let data = req.data;
-    let list = [];
-    for(let i in data) {
-        list.push(data[i].id);
+    let listReceipts = [];
+    let listItems = [];
+    for (let i in data) {
+        listReceipts.push(data[i].id);
     }
-    //todo item 목록 불러오기
-    //todo item 분류하기
+    for (let i in listReceipts) {
+        for(let j in await receiptItemRepository.getItemsByReceiptID(listReceipts[i])) {
+            let items = await receiptItemRepository.getItemsByReceiptID(listReceipts[i]);
+            if(items[j].cost > 0)
+                listItems.push(items[j]);
+        }
+    }
+    res.send(listItems);
     //todo 분석후 수치화 하기
 });
 app.get('/Receipt/id/:id', async (req, res) => {
@@ -76,6 +84,9 @@ app.get('/Receipt/id/:id', async (req, res) => {
 });
 function insertReceiptItem(data) {
     console.log(data);
+    for(let i in data) {
+       data[i].category = chatGPT(data[i].objectName);
+    }
     receiptItemRepository.Insert(data);
     // 쿼리문
     //console.log(`insert into perfect_wallet (item, qu, cost) values ('${query_item}', ${query_qu}, ${query_cost});`);
