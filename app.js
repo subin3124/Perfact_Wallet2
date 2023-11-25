@@ -8,7 +8,6 @@ const fs = require('fs');
 const static = require('serve-static');
 const cors = require('cors');
 const dbconfig = require('./config/dbconfig.json');
-const azureconfig = require('./config/azureconfig.json');
 const {ImageAnnotatorClient} = require("@google-cloud/vision");
 const multer  = require('multer')
 const {response, json} = require("express");
