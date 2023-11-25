@@ -62,11 +62,12 @@ app.get('/Receipt/date/:dat', async (req, res) => {
     res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
 });
 app.post('/Receipt/RedPen/', async (req, res) => {
-    let data = await req.json();
-    console.log('debug : '+data);
+
+    //console.log('debug : '+data);
     console.log('debug : '+req.body.data);
     console.log('debug : '+req.body.json);
-    console.log('debug : '+await req.json());
+    //console.log('debug : '+await req.json());
+    let data = req.body;
     let listReceipts = [];
     let listItems = [];
     let TotalCost = 0;
