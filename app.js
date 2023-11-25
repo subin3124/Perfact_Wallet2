@@ -63,7 +63,7 @@ app.get('/Receipt/date/:dat', async (req, res) => {
 });
 app.post('/Receipt/RedPen/', async (req, res) => {
     let data = req.body
-    console.log('debug : '+data);
+    console.log('debug : '+data[0]);
     let listReceipts = [];
     let listItems = [];
     let TotalCost = 0;
