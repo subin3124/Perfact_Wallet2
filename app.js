@@ -62,7 +62,7 @@ app.get('/Receipt/date/:dat', async (req, res) => {
     res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
 });
 app.post('/Receipt/RedPen/', async (req, res) => {
-    let data = req.data;
+    let data = req.body.data;
     console.log('debug : '+data);
     let listReceipts = [];
     let listItems = [];
