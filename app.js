@@ -61,6 +61,16 @@ app.get('/getDB', async (req, res) => {
 app.get('/Receipt/date/:dat', async (req, res) => {
     res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
 });
+app.post('/Receipt/RedPen/', (req, res) => {
+    let data = req.data;
+    let list = [];
+    for(let i in data) {
+        list.push(data[i].id);
+    }
+    //todo item 목록 불러오기
+    //todo item 분류하기
+    //todo 분석후 수치화 하기
+});
 app.get('/Receipt/id/:id', async (req, res) => {
     res.send(await receiptRepository.getReceiptByID(req.param('id')));
 });
@@ -90,7 +100,7 @@ app.get('/excel/:ReceiptID', async (req, res) => {
     excel.setSheet('workSheet1');
     excel.initColumns();
     excel.addRows(data);
-    let workbook = excel.getWorkbook()
+    let workbook = excel.getWorkbook();
     workbook.xlsx.write(res).then((r) => res.end());
 });
 app.get('/Receipt/Item/:ReceiptID', async (req, res) => {
