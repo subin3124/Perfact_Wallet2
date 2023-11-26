@@ -1,7 +1,7 @@
-/*const gpt = require("./ChatGPT");
-test("chatgpt api", async () => {
-    expect(await gpt("연필")).toBe("문구");
+const gpt = require("./ChatGPT");
+/*test("chatgpt api", async () => {
+    expect(await gpt("")).toBe("의류");
 });*/
-test("test not env", () => {
+test("test always true", () => {
    expect("1").toBe("1");
 });

@@ -62,11 +62,6 @@ app.get('/Receipt/date/:dat', async (req, res) => {
     res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
 });
 app.post('/Receipt/RedPen/', async (req, res) => {
-
-    //console.log('debug : '+data);
-    console.log('debug : '+req.body.data);
-    console.log('debug : '+req.body.json);
-    //console.log('debug : '+await req.json());
     let data = req.body;
     let listReceipts = [];
     let listItems = [];
@@ -174,13 +169,18 @@ app.post('/image',upload.single('image'),(req, res)=> {
                         'imageUrl': `${url}`
                     });
                     let receiptID = `${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${new Date().getHours()}${new Date().getMinutes()}${new Date().getMilliseconds()}`
-                    receiptRepository.Insert({
-                        ID: receiptID,
-                        MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
-                        Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
-                        imageSrc: url,
-                        date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
-                    });
+                    try {
+                        receiptRepository.Insert({
+                            ID: receiptID,
+                            MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
+                            Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
+                            imageSrc: url,
+                            date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
+                        });
+                    }catch (e) {
+                        res.status(500);
+                        res.send(e.message);
+                    }
                     let Itemdata = [];
                     for (let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
                         Itemdata.push({
