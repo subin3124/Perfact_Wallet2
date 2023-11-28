@@ -158,7 +158,7 @@ app.post('/image',upload.single('image'),async (req, res) => {
             .then((output) => fs.writeFileSync(`uploads/${req.file.filename}`,output));
     });
     console.log(url);
-    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
+    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31&features=ocrHighResolution', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
