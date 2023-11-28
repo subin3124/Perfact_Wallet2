@@ -31,10 +31,10 @@ function addImage(imageURL) {
     const imgElement = document.createElement('img');
     imgElement.src = imageURL;
     imgElement.style.position = 'absolute';
-    imgElement.style.left = '100px';
+    imgElement.style.left = '250px';
     imgElement.style.top = '100px';
     imgElement.style.width = '200px';
-    imgElement.style.height = '150px';
+    imgElement.style.height = 'auto;';
     imgElement.style.cursor = 'grab';
 
     imgElement.addEventListener('mousedown', function (event) {
@@ -200,3 +200,4 @@ document.addEventListener('click', function (event) {
         }
     }
 });
+
