@@ -58,8 +58,8 @@ app.post('/callDB', (req, res) => {
 app.get('/getDB', async (req, res) => {
     res.send(await receiptRepository.ReadAll('select * from Receipt', receiptRepository.getInstance()));
 });
-app.get('/Receipt/date/:dat', async (req, res) => {
-    res.send(await receiptRepository.getReceiptByDate(req.param('dat')));
+app.get('/Receipt/date/', async (req, res) => {
+    res.send(await receiptRepository.getReceiptByDate(req.query('dateMax'), req.query('dateMin')));
 });
 app.post('/Receipt/RedPen/', async (req, res) => {
     let data = req.body;

@@ -24,8 +24,8 @@ class ReceiptRepository {
             });
         });
     }
-    async getReceiptByDate(date) {
-        let data = await this.ReadAll(`select * from Receipt where date = '${date}'`,this.db);
+    async getReceiptByDate(dateMax, dateMin) {
+        let data = await this.ReadAll(`select * from Receipt where date between '${dateMax}' and '${dateMin}'`,this.db);
         return data;
     }
     async getReceiptByID(id) {
