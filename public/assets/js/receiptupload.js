@@ -18,6 +18,7 @@ function downloadExcel() {
             });
     }
 }
+
 function onUpload() {
     let imgdo = document.getElementById('imageRes');
     console.log("test1");
@@ -71,4 +72,19 @@ function ReciptSaveOnDrop(event) {
     }).then((res) => {
     console.log(res[0].StoreName);
     });
+}
+
+function onFileInputChange() {
+    let imgdo = document.getElementById('imageRes');
+    let fileInput = document.getElementById('image');
+    let selectedFile = fileInput.files[0];
+
+    if (selectedFile) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            imgdo.setAttribute('src', e.target.result);
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+    document.getElementById('image').addEventListener('change', onFileInputChange);
 }
