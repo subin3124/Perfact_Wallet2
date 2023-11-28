@@ -32,7 +32,7 @@
 
 			<!-- Main -->
 				<section id="main">
-					<div class="container">
+					<div class="canvascontainer">
 						<canvas id="jsCanvas" class="canvas"></canvas>
 						<br>
 						<button id="addImageBtn">이미지 추가</button>
@@ -51,7 +51,7 @@
 							<option value="24">24px</option>
 							<option value="26">26px</option>
 							<option value="28">28px</option>
-							<option value="36">36px</option>
+							<option value="36" selected>36px</option>
 							<option value="48">48px</option>
 							<option value="60">60px</option>
 							<option value="72">72px</option>
@@ -63,7 +63,7 @@
 						<button id="stopBtn">멈추기</button>
 						<div class="controls">
 							<div class="controls__range">
-								<input type="range" id="jsRange" min="0.1" max="5.0" value="2.5" step="0.1" />
+								<input type="range" id="jsRange" min="1.0" max="10.0" value="2.5" step="0.1" />
 							</div>
 							<div class="controls__colors" id="jsColors">
 								<div class="controls__color jsColor" style="background-color: black;"></div>
@@ -73,7 +73,6 @@
 								<div class="controls__color jsColor" style="background-color: yellow;"></div>
 								<div class="controls__color jsColor" style="background-color: green;"></div>
 								<div class="controls__color jsColor" style="background-color: blue;"></div>
-								<div class="controls__color jsColor" style="background-color: navy;"></div>
 								<div class="controls__color jsColor" style="background-color: purple;"></div>
 							</div>
 						</div>
@@ -84,6 +83,46 @@
 		</div>
 
 		<!-- Scripts -->
+		<script>
+		function RedPen1(dateMax, dateMin) {
+			fetch(`https://inuesc.azurewebsites.net/Receipt/date?dateMax=${dateMax}&dateMin=${dateMin}`, {
+				method: 'GET'
+			}).then((response)=>{
+				if(response.ok) {
+					return response.json();
+				}
+			}).then((data) => {
+				let array = [];
+				
+				for(let i in data) {
+					array.push({ReceiptId:data[i].ReceiptID});
+				}
+				RedPen2(array);
+			})
+		}
+		function RedPen2(ReceiptArray) {
+			let PercentData = [];
+			fetch('https://inuesc.azurewebsites.net/Receipt/RedPen', {
+				'method' : 'post',
+				headers:{
+					'content-type' : 'application/json'
+				},
+				body : JSON.stringify(ReceiptArray) //오브젝트 타입 예시 [{ReceiptId : "23942382947"}, {ReceiptId : "34023498"}]
+			}).then((res) => {return res.json()}).then((data) => {
+			
+				for(let i in data.Items) {
+					PercentData.push({category : data.Items[i].category, percent : calculatePercentage(data.Items[i].cost, data.totalCost)});
+			
+				}
+				console.log(PercentData);
+				return PercentData;
+			});
+		}
+		function calculatePercentage(part, whole) {
+  			return (part / whole) * 100;
+		}
+		</script>
+
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.dropotron.min.js"></script>
 			<script src="assets/js/browser.min.js"></script>

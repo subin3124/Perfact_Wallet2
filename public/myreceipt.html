@@ -32,15 +32,27 @@
 
 			<!-- Main -->
 				<section id="main">
-					<div class="container">
-
-		
-					</div>
+					<div class="container" id="con"></div>
 				</section>
 
-		
-
 		</div>
+		<script>
+			fetch('https://inuesc.azurewebsites.net/getDB', {
+				'method': 'get',
+			}).then(r => {
+				if(r.ok)
+					return r.json();
+			}).then(resData => {
+				for(let i in resData) {
+				let img = document.createElement("img");
+				img.src = resData[i].imageSrc;
+				img.setAttribute("height",300);
+				img.setAttribute("width",200);
+				let con = document.getElementById('con');
+				con.appendChild(img);
+				}	
+			})
+		</script>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
