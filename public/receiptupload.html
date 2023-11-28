@@ -33,11 +33,18 @@
 		</nav>
 		<!-- Main -->
 		<section id="main">
-			<div class="container">
-					<button id="uploadButton" onclick="onUpload()">파일업로드</button>
-					<input type="file" id="image" name="image">
-					<button id="downloadExcel" onclick="downloadExcel()">엑셀</button>
+			<div class="receipt">
+				<div class="receiptcontainer">
+					<div class="centered-text">
+						영수증 미리보기
+					</div>
 					<img src="" id="imageRes"/>
+				</div>
+				<div class="buttoncontainer">
+					<input type="file" id="image" name="image" class="file-input" onchange="onFileInputChange()" />
+					<button id="uploadButton" onclick="onUpload()">파일업로드</button>
+					<button id="downloadExcel" onclick="downloadExcel()">엑셀</button>
+				</div>
 			</div>
 		</section>
 
