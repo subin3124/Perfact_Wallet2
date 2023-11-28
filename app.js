@@ -40,13 +40,13 @@ app.use(express.json());
 app.use('/public', static(path.join(__dirname, 'public')));
 app.use('/docs', express.static(__dirname + '/doc'));
 
-app.post('/excel/input:/id',upload.single('file'),async (req, res) => {
+app.post('/excel/input/:id',upload.single('file'),async (req, res) => {
     const excel = new ExcelJS();
     await excel.loadWorkbook(req.file.filename);
     excel.setSheet('one');
     let data = excel.getRows();
     console.log(data);
-    insertReceiptItem(data);
+    await insertReceiptItem(data);
 });
 
 // DB에서 데이터를 검색하고 클라이언트에 응답
@@ -177,7 +177,6 @@ app.post('/image',upload.single('image'),(req, res)=> {
                             imageSrc: url,
                             date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
                         });
-                    }
                     let Itemdata = [];
                     for (let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
                         Itemdata.push({

@@ -1,6 +1,3 @@
-
-
-
 async function requestGPT(text) {
     const OpenAI = require('openai');
     const openai = new OpenAI({
@@ -11,7 +8,7 @@ async function requestGPT(text) {
         messages: [
             {
                 "role": "system",
-                "content": "모든 질문에 명확한 대답을 하며 물품의 종류에 대해 음식, 문구, 여가,  술, 생활용품, 의류, 가전, 책, 기타로 분류하고 설명은 하지 않는 분석가"
+                "content": "모든 질문에 명확한 대답을 하며 물품의 종류에 대해 음식, 문구, 여가, 술, 생활용품, 의류, 가전, 책, 기타로 분류하고 설명은 하지 않는 분석가"
             },
             {
                 "role": "user",
