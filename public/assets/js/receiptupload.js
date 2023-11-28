@@ -35,6 +35,7 @@ function onUpload() {
             imgdo.setAttribute('src', res.imageUrl);
             ReceiptID = res.ReceiptID;
             console.log(res);
+            alert("업로드 성공");
         })
 }
 
