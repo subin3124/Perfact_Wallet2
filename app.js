@@ -128,19 +128,31 @@ app.get('/Receipt/Item/:ReceiptID', async (req, res) => {
     let recID = req.param('ReceiptID');
     res.send(await receiptItemRepository.getItemsByReceiptID(recID));
 });
-app.post('/image',upload.single('image'),(req, res)=> {
+app.post('/image',upload.single('image'),async (req, res) => {
     console.log(req.file)
-   /* const detectText = async (selectImage) => {
-        const [result] = await client.textDetection(selectImage);
-        const annotations = result.textAnnotations;
-        console.log('Text:');
-        annotations.forEach(annotation => {
-            console.log(annotation.description);
-            return annotation.description;
-        });
-    }
-    detectText(req.file.path); */
-    const url = 'https://inuesc.azurewebsites.net/hostingImage/'+req.file.filename;
+    /* const detectText = async (selectImage) => {
+         const [result] = await client.textDetection(selectImage);
+         const annotations = result.textAnnotations;
+         console.log('Text:');
+         annotations.forEach(annotation => {
+             console.log(annotation.description);
+             return annotation.description;
+         });
+     }
+     detectText(req.file.path); */
+    const url = 'https://inuesc.azurewebsites.net/hostingImage/' + req.file.filename;
+    await fetch('https://esc23.cognitiveservices.azure.com/computervision/imageanalysis:segment?api-version=2023-02-01-preview&mode=backgroundRemoval', {
+        method: 'post',
+        headers: {
+            'content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': process.env.azureVision
+        },
+        body: JSON.stringify({url: url})
+    }).then((res) => {
+        return res.blob();
+    }).then((r) => {
+        FileSaver.saveAs(r, `uploads/${req.file.filename}`)
+    });
     console.log(url);
     fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
         method: 'POST',
@@ -149,34 +161,34 @@ app.post('/image',upload.single('image'),(req, res)=> {
             'Ocp-Apim-Subscription-Key': `${process.env.azure}`
         },
         body: `{'urlSource': '${url}'}`
-    }).
-    then((r) => {
+    }).then((r) => {
         let url2 = r.headers.get("Operation-location");
-        console.log("abcd"+r.status);
-        console.log("aaa"+url2);
-        setTimeout(function() {
+        console.log("abcd" + r.status);
+        console.log("aaa" + url2);
+        setTimeout(function () {
             fetch(url2, {
                 headers: {
                     'Ocp-Apim-Subscription-Key': `${process.env.azure}`
                 }
-            })  .then((response) => {
-                    console.log(response.status);
-                    console.log(response.body);
-                    return response.json()})
+            }).then((response) => {
+                console.log(response.status);
+                console.log(response.body);
+                return response.json()
+            })
                 .then(async (data) => {
                     res.set({
                         'content-type': 'application/json',
                         'imageUrl': `${url}`
                     });
                     let receiptID = `${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${new Date().getHours()}${new Date().getMinutes()}${new Date().getMilliseconds()}`
-                    
-                        receiptRepository.Insert({
-                            ID: receiptID,
-                            MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
-                            Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
-                            imageSrc: url,
-                            date: data.analyzeResult.documents[0].fields.TransactionDate.content
-                        });
+
+                    receiptRepository.Insert({
+                        ID: receiptID,
+                        MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
+                        Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
+                        imageSrc: url,
+                        date: data.analyzeResult.documents[0].fields.TransactionDate.content
+                    });
                     let Itemdata = [];
                     for (let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
                         Itemdata.push({
@@ -191,7 +203,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     res.send({ReceiptID: receiptID, imageUrl: url})
                 });
         }, 5000);
-    }).catch((reason) =>{
+    }).catch((reason) => {
         console.log(reason);
     });
 });
