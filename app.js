@@ -190,7 +190,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                     console.log(data.analyzeResult.documents[0].fields)
                     res.send({ReceiptID: receiptID, imageUrl: url})
                 });
-        }, 3000);
+        }, 5000);
     }).catch((reason) =>{
         console.log(reason);
     });
