@@ -63,7 +63,7 @@ function choiceDate(newDIV) {
         const selectedDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth(), parseInt(newDIV.textContent));
         const formattedDate = `${selectedDate.getFullYear()}-${leftPad(selectedDate.getMonth() + 1)}-${leftPad(selectedDate.getDate())}`;
         console.log(formattedDate); 
-        window.location.href = "whiteboard.html";
+        window.location.href = "whiteboard.html?data="+formattedDate;
     });
 }
 

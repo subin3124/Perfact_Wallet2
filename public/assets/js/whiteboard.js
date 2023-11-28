@@ -26,6 +26,38 @@ addImageBtn.addEventListener('click', () => {
     whiteboard.appendChild(input);
     input.click();
 });
+function loadReceipt() {
+    let params = getUrlParams();
+    let date = params.data;
+    fetch(`https://inuesc.azurewebsites.net/Receipt/date?dateMax=${date}&dateMin=${date}`, {
+        method: 'GET'
+    }).then((response)=>{
+        if(response.ok) {
+            return response.json();
+        }
+    }).then((data) => {
+        let array = [];
+
+        for(let i in data) {
+            array.push({ReceiptId: data[i].ReceiptID});
+            console.log(data[i].ReceiptID);
+            fetch(`https://inuesc.azurewebsites.net/Receipt/id/${data[i].ReceiptID}`, {
+                method:'get',
+            }).then((res) => { return res.json()}).then((resdata) => {
+                console.log(resdata);
+                addImage(resdata[0].imageSrc);
+                let txt = `${resdata[0].StoreName} \n 금액 : ${resdata[0].TotalCost}원 \n 날짜 : ${resdata[0].date}`;
+                addText(txt);
+            });
+        }
+    });
+}
+loadReceipt();
+function getUrlParams() {
+    var params = {};
+    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
+    return params;
+}
 
 function addImage(imageURL) {
     const imgElement = document.createElement('img');
