@@ -16,7 +16,7 @@ const ReceiptItemRepository = require("./ReceiptItemRepository");
 const ReceiptRepository = require("./ReceiptRepository");
 const chatGPT = require('./ChatGPT');
 const FileSaver = require('file-saver');
-
+const {createWriteStream} = require("fs");
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -151,8 +151,8 @@ app.post('/image',upload.single('image'),async (req, res) => {
         body: JSON.stringify({url: url})
     }).then((res) => {
         return res.blob();
-    }).then((r) => {
-        FileSaver.saveAs(r, `uploads/${req.file.filename}`)
+    }).then(async (r) => {
+        createWriteStream(`uploads/${req.file.filename}`).write(Buffer.from(await r.arrayBuffer()));
     });
     console.log(url);
     fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
