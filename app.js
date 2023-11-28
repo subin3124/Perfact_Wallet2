@@ -4,7 +4,6 @@ const mysql = require('mysql2');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
-
 const static = require('serve-static');
 const cors = require('cors');
 const dbconfig = require('./config/dbconfig.json');
@@ -16,6 +15,7 @@ const ExcelJS = require("./ExcelJS");
 const ReceiptItemRepository = require("./ReceiptItemRepository");
 const ReceiptRepository = require("./ReceiptRepository");
 const chatGPT = require('./ChatGPT');
+
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -175,7 +175,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                             MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
                             Total: data.analyzeResult.documents[0].fields.Total.valueNumber,
                             imageSrc: url,
-                            date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
+                            date: data.analyzeResult.documents[0].fields.TransactionDate.content
                         });
                     let Itemdata = [];
                     for (let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
