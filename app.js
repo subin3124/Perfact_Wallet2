@@ -169,7 +169,7 @@ app.post('/image',upload.single('image'),(req, res)=> {
                         'imageUrl': `${url}`
                     });
                     let receiptID = `${new Date().getFullYear()}${new Date().getMonth()}${new Date().getDate()}${new Date().getHours()}${new Date().getMinutes()}${new Date().getMilliseconds()}`
-                    try {
+                    
                         receiptRepository.Insert({
                             ID: receiptID,
                             MarketName: data.analyzeResult.documents[0].fields.MerchantName.valueString,
@@ -177,9 +177,6 @@ app.post('/image',upload.single('image'),(req, res)=> {
                             imageSrc: url,
                             date: data.analyzeResult.documents[0].fields.TransactionDate.valueDate
                         });
-                    }catch (e) {
-                        res.status(500);
-                        res.send(e.message);
                     }
                     let Itemdata = [];
                     for (let array in data.analyzeResult.documents[0].fields.Items.valueArray) {
