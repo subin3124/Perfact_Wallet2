@@ -147,7 +147,7 @@ function addText(text) {
             document.onmouseup = null;
         };
     });
-
+    if(!stopper){
     textElement.addEventListener('click', function () {
         if (selectedImage) {
             selectedImage.style.border = "none";
@@ -157,6 +157,7 @@ function addText(text) {
             selectedText.style.border = "none";
         }
     });
+    }
 
     textElement.setAttribute('data-type', 'text');
 
@@ -200,4 +201,3 @@ document.addEventListener('click', function (event) {
         }
     }
 });
-

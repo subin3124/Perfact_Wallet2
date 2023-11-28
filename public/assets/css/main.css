@@ -434,7 +434,7 @@ header.major h2 {
     width: 600px; 
     height: auto;
     position: relative;
-    left: 35%;
+    left: 32.5%;
     border-radius: 15px;
 }
 
@@ -506,7 +506,7 @@ header.major h2 {
 	left:50%;
 	text-align: center;
 	border: 2px solid #e48080;
-	margin: 40px 0 20px 425px;
+	margin: 40px 0 20px 395px;
 }
 
 /* 화이트보드 */
@@ -518,10 +518,28 @@ header.major h2 {
 	margin-left: 150px;
 }
 /* 로그인 팝업 */
-#loginButton,
+#loginButton {
+	position: fixed;
+	top: 40px; 
+	right: 100px; 
+}
 #signupButton{
-	justify-content: right;
-	text-align: right;
+	position: fixed;
+	top: 40px; 
+	right: 20px; 
+}
+#userName {
+	position: fixed;
+	top: 40px; 
+	right: 20px; 
+}
+#loginButton,
+#signupButton,
+.close {
+  border: 2px solid #000;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
 }
 
 #loginPopup{
@@ -629,19 +647,27 @@ header.major h2 {
     margin: 50px; 
 }
 
+#uploadButton{
+	width: 280px;
+	height: 100px;
+	border:none;
+	background: url('./images/uploadicon.png') no-repeat center center;
+}
 /* Painting */
 .canvas {
 	background-image: url("./images/tempbackground.avif");
 	background-size: cover;
     width: 1370px;
     height: 500px;
-    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
+	border-bottom: 2px solid rgb(241, 143, 143);
 }
 
 .controls {
-    display: flex;
-    flex-direction: column; 
+	margin-top: 10px;
+    display:flex;
+    flex-direction: row; 
     align-items: center;
+	justify-content: center;
 }
 
 .controls .controls__btns {
@@ -673,19 +699,111 @@ header.major h2 {
 }
 
 .controls__colors .controls__color {
-    width: 50px;
-    height: 50px;
+	margin-top: 5px;
+    width: 35px;
+    height: 35px;
     border-radius: 25px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
 }
 
-
 .controls .controls__range{
-    margin-bottom: 30px;
+	margin-top: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
+
+/* colorpicker */
+#colorPickerWrapper {
+    position: relative;
+}
+
+.colorpicker {
+	margin-top: 5px;
+    width: 35px;
+    height: 35px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
+    border: none;
+    padding: 0;
+    background-size: cover;
+}
+.hidden {
+    display: none;
+}
+
+#textColorPicker {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	cursor: pointer;
+	border: none;
+	padding: 0;
+	background-size: cover;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: none;
+	margin-left: 10px;
+  }
+  
+  #textColorPicker::-webkit-color-swatch {
+	border-radius: 50%; 
+	border:none;
+	width: 100%;
+	height: 100%;
+  }
+  
+  #stopBtn {
+	width: 50px;
+	height: 50px;
+	border:none;
+	background: url('./images/handicon.avif') no-repeat center center;
+	background-size: cover;
+	margin-left: 10px;
+	margin-right: 10px;
+  }
+  #addImageBtn{
+	width: 70px;
+	height: 50px;
+	border:none;
+	background: url('./images/imageicon.png') no-repeat center center;
+	background-size:contain;
+	margin-left: 10px;
+	margin-right: 10px;
+  }
+  #addTextButton{
+	width: 50px;
+	height: 50px;
+	border:none;
+	background: url('./images/texticon.png') no-repeat center center;
+	background-size: cover;
+	margin-left: 10px;
+	margin-right: 10px;
+  }
+  #drawingBtn{
+	width: 50px;
+	height: 50px;
+	border:none;
+	background: url('./images/penicon.png') no-repeat center center;
+	background-size: cover;
+	margin-left: 10px;
+	margin-right: 10px;
+  }
+  #eraserBtn{
+	width: 50px;
+	height: 50px;
+	border:none;
+	background: url('./images/eraser.png') no-repeat center center;
+	background-size: cover;
+	margin-left: 10px;
+	margin-right: 10px;
+  }
 
 /* 영수증 */
 #con {
 	margin:30px 20px 20px 200px;
 }
+
+

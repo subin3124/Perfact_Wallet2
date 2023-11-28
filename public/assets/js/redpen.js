@@ -35,3 +35,5 @@ function RedPen2(ReceiptArray) {
 function calculatePercentage(part, whole) {
       return (part / whole) * 100;
 }
+
+
