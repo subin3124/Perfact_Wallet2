@@ -28,7 +28,7 @@ const INITIAL_COLOR = "#000000";
 ctx.strokeStyle = "#2c2c2c";
 
 canvas.width = 1370;
-canvas.height = 500;
+canvas.height = 520;
 
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5; /* 라인 굵기 */

@@ -515,7 +515,7 @@ header.major h2 {
 	src: url('font.ttf') format('truetype');
 }
 .canvascontainer{
-	margin-left: 150px;
+	margin-left: 148px;
 }
 /* 로그인 팝업 */
 #loginButton {
@@ -655,15 +655,15 @@ header.major h2 {
 }
 /* Painting */
 .canvas {
-	background-image: url("./images/tempbackground.avif");
-	background-size: cover;
+	background-image: url("./images/tempbackground.png");
+	background-size: contain;
     width: 1370px;
-    height: 500px;
+    height: 520px;
 	border-bottom: 2px solid rgb(241, 143, 143);
 }
 
 .controls {
-	margin-top: 10px;
+	margin-top: 5px;
     display:flex;
     flex-direction: row; 
     align-items: center;
