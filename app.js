@@ -154,7 +154,7 @@ app.post('/image',upload.single('image'),async (req, res) => {
         return res.blob();
     }).then(async (r) => {
 
-        pngToJpeg({quality: 90})(Buffer.from(await r.arrayBuffer()))
+        pngToJpeg({quality: 50})(Buffer.from(await r.arrayBuffer()))
             .then((output) => fs.writeFileSync(`uploads/${req.file.filename}`,output));
     });
     console.log(url);
