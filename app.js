@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
         // 이 경로로 저장=> 작업영역/uploads/videos/
     },
     filename:(req,file,cb)=>{
-        cb(null,"image"+"_"+Date.now()+".png");
+        cb(null,"image"+"_"+Date.now()+".jpg");
         // 저장방식=> image_현재시간.jpg 형식
     }
 });
