@@ -1,7 +1,7 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
-
+let ReceiptArray = []
 function handleColorClick(event) {
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
@@ -23,18 +23,12 @@ function handleRangeChange(event) {
   ctx.lineWidth = size;
 }
 
-const mode = document.getElementById("jsMode");
-const saveBtn = document.getElementById("jsSave");
-
 const INITIAL_COLOR = "#000000";
 
 ctx.strokeStyle = "#2c2c2c";
 
-canvas.width = 1200;
+canvas.width = 1370;
 canvas.height = 500;
-
-ctx.fillStyle = "white";
-ctx.fillRect(0, 0, 1200, 500);
 
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5; /* 라인 굵기 */
