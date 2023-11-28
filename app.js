@@ -162,12 +162,14 @@ app.post('/image',upload.single('image'),async (req, res) => {
             'Ocp-Apim-Subscription-Key': `${process.env.azure}`
         },
         body: `{'urlSource': '${url}'}`
-    }).then((r) => {
-        if(r.status === 400)
-            res.send('image is wrong!');
+    }).then(async (r) => {
+        if (r.status === 400) {
+            let dt = await r.json();
+            console.log(dt.error.innererror.message);
+        }
         let url2 = r.headers.get("Operation-location");
         console.log("abcd" + r.status);
-        console.log(r.statusMessage);
+
         console.log("aaa" + url2);
 
         setTimeout(function () {
