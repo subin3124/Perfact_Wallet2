@@ -153,9 +153,7 @@ app.post('/image',upload.single('image'),async (req, res) => {
     }).then((res) => {
         return res.blob();
     }).then(async (r) => {
-
-        pngToJpeg({quality: 50})(Buffer.from(await r.arrayBuffer()))
-            .then((output) => fs.writeFileSync(`uploads/${req.file.filename}`,output));
+        createWriteStream('img.jpg').write(Buffer.from(await r.arrayBuffer()));
     });
     console.log(url);
     fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31&features=ocrHighResolution', {
