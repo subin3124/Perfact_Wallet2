@@ -15,7 +15,9 @@ const ExcelJS = require("./ExcelJS");
 const ReceiptItemRepository = require("./ReceiptItemRepository");
 const ReceiptRepository = require("./ReceiptRepository");
 const chatGPT = require('./ChatGPT');
-
+const FileSaver = require('file-saver');
+const {createWriteStream} = require("fs");
+const pngToJpeg = require('png-to-jpeg');
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,"uploads/")
@@ -150,21 +152,27 @@ app.post('/image',upload.single('image'),async (req, res) => {
         body: JSON.stringify({url: url})
     }).then((res) => {
         return res.blob();
-    }).then((r) => {
-        FileSaver.saveAs(r, `uploads/${req.file.filename}`)
+    }).then(async (r) => {
+        createWriteStream(`uploads/${req.file.filename}`).write(Buffer.from(await r.arrayBuffer()));
     });
     console.log(url);
-    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31', {
+    fetch('https://inuesc.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31&features=ocrHighResolution', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': `${process.env.azure}`
         },
         body: `{'urlSource': '${url}'}`
-    }).then((r) => {
+    }).then(async (r) => {
+        if (r.status === 400) {
+            let dt = await r.json();
+            console.log(dt.error.innererror.message);
+        }
         let url2 = r.headers.get("Operation-location");
         console.log("abcd" + r.status);
+
         console.log("aaa" + url2);
+
         setTimeout(function () {
             fetch(url2, {
                 headers: {
