@@ -167,6 +167,7 @@ app.post('/image',upload.single('image'),async (req, res) => {
             res.send('image is wrong!');
         let url2 = r.headers.get("Operation-location");
         console.log("abcd" + r.status);
+        console.log(r.statusMessage);
         console.log("aaa" + url2);
 
         setTimeout(function () {
