@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
         // 이 경로로 저장=> 작업영역/uploads/videos/
     },
     filename:(req,file,cb)=>{
-        cb(null,"image"+"_"+Date.now()+".jpg");
+        cb(null,"image"+"_"+Date.now()+".png");
         // 저장방식=> image_현재시간.jpg 형식
     }
 });
@@ -163,11 +163,12 @@ app.post('/image',upload.single('image'),async (req, res) => {
         },
         body: `{'urlSource': '${url}'}`
     }).then((r) => {
+        if(r.status === 400)
+            res.send('image is wrong!');
         let url2 = r.headers.get("Operation-location");
         console.log("abcd" + r.status);
         console.log("aaa" + url2);
-        if(r.status === 400)
-            res.send('image is wrong!');
+
         setTimeout(function () {
             fetch(url2, {
                 headers: {
