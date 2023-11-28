@@ -146,19 +146,6 @@ mark {
 	color: inherit;
 }
 
-input::-moz-focus-inner {
-	border: 0;
-	padding: 0;
-}
-
-input,
-select,
-textarea {
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	-ms-appearance: none;
-	appearance: none;
-}
 
 /* Basic */
 
@@ -529,18 +516,7 @@ header.major h2 {
 	src: url('font.ttf') format('truetype');
 }
 
-#whiteboard {
-	width: 1000px;
-	height: 500px;
-	background-color: white;
-	border-radius: 15px;
-	box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
-	margin: 0 auto; 
-	margin-top: 30px;
-}
-
 /* 로그인 팝업 */
-
 #loginButton,
 #signupButton{
 	justify-content: right;
@@ -599,4 +575,107 @@ header.major h2 {
 	font-weight: 600;
 	font-size: 30px;
 	color: #303030;
+}
+
+/* 영수증 업로드 */
+.receipt{
+    display: flex;
+    flex-direction:row; 
+}
+
+.receiptcontainer {
+    border: 4px solid #e48080; 
+    padding: 15px; 
+    width: 600px; 
+    height: 500px; 
+	border-top-right-radius: 15px;
+	border-top-left-radius: 15px;
+	display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.centered-text {
+    position: absolute;
+    text-align: center;
+	font-size: 24px; 
+	color: #000000;
+	font-weight: 500;
+}
+
+#imageRes {
+	max-width: 100%; 
+	max-height: 100%; 
+	width: auto; 
+	height: 100%;
+	z-index: 10;
+}
+
+.buttoncontainer {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+	margin: 40px 100px 0;
+}
+
+.file-input,
+#uploadButton,
+#downloadExcel {
+    margin: 50px; 
+}
+
+/* Painting */
+.canvas {
+    width: 1200px;
+    height: 500px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
+}
+
+.controls {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+}
+
+.controls .controls__btns {
+    margin-bottom: 30px;
+}
+
+.controls__btns button{
+    all: unset;
+    cursor: pointer;
+    background-color: white;
+    padding: 5px 0px;
+    width: 80px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    color:rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.controls__btns button:active {
+    transform: scale(0.98);
+}
+
+.controls .controls__colors {
+    display: flex;
+}
+
+.controls__colors .controls__color {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.068);
+}
+
+
+.controls .controls__range{
+    margin-bottom: 30px;
 }
