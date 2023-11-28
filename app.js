@@ -166,6 +166,8 @@ app.post('/image',upload.single('image'),async (req, res) => {
         let url2 = r.headers.get("Operation-location");
         console.log("abcd" + r.status);
         console.log("aaa" + url2);
+        if(r.status === 400)
+            res.send('image is wrong!');
         setTimeout(function () {
             fetch(url2, {
                 headers: {
