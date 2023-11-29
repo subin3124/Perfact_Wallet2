@@ -19,7 +19,7 @@ class ReceiptItemRepository {
         }
     }
     async deleteAll() {
-        this.db.run('delete * from Item', (err) => {
+        this.db.run('delete from Item', (err) => {
             if(err)
                 console.error(`delete failed ${err.message}`);
         });
