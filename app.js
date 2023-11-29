@@ -71,7 +71,12 @@ app.get('/Receipt/Item/date', async(req,res) => {
         ary.push(data);
     }
     res.send(ary);
-})
+});
+app.get('/delete',async(req,res) => {
+   await receiptRepository.deleteAll();
+   await receiptItemRepository.deleteAll();
+   res.send("삭제성공");
+});
 app.post('/Receipt/RedPen/', async (req, res) => {
     let data = req.body;
     let listReceipts = [];

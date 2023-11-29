@@ -28,6 +28,12 @@ class ReceiptRepository {
         let data = await this.ReadAll(`select * from Receipt where date between '${dateMax}' and '${dateMin}'`,this.db);
         return data;
     }
+    async deleteAll() {
+        this.db.run('delete * from Receipt', (err) => {
+            if(err)
+                console.error(`delete failed ${err.message}`);
+        });
+    }
     async getReceiptByID(id) {
         let data = await this.ReadAll(`select * from Receipt where ReceiptID = '${id}'`, this.db);
         return data;

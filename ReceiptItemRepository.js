@@ -18,6 +18,12 @@ class ReceiptItemRepository {
             });
         }
     }
+    async deleteAll() {
+        this.db.run('delete * from Item', (err) => {
+            if(err)
+                console.error(`delete failed ${err.message}`);
+        });
+    }
     async ReadAll(query,db){
         return new Promise(function(resolve,reject){
             db.all(query, function(err,rows){

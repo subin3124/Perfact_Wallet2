@@ -6,7 +6,7 @@
 </head>
 <body>
 <canvas id="chart" style="max-height: 200px; max-width: 200px"></canvas>
-<p id="text"></p>
+<p id="text" style="white-space: pre-wrap;"></p>
 <script>
     let txt = document.getElementById("text");
     fetch(`https://inuesc.azurewebsites.net/Receipt/Item/date?dateMax=${getUrlParams().dateMax}&dateMin=${getUrlParams().dateMin}`, {
@@ -18,10 +18,12 @@
         let total = 0;
         console.log(data);
        for(let i in data) {
-           txtary += `품목 : ${data[i].item} \n 금액 : ${data[i].cost}\n`;
-           total += data[i].cost;
+           for(let j in data[i]) {
+               txtary += `품목 : ${data[i][j].item} \n금액 : ${data[i][j].cost}\n--------------\n`;
+               total += data[i][j].cost;
+           }
        }
-       txtary+=`합계 : ${total}원`;
+       txtary+=`\n합계 : ${total}원`;
        txt.textContent = txtary;
        console.log(txtary);
     });

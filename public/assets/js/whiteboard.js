@@ -60,6 +60,16 @@ function popupOpen() {
     let specs = "width=500,height=400,top=200,left=100, toolbar=no,menubar=no,scrollbars=yes, resizable=yes";
     window.open(url,name,specs)
 }
+function popupOpenMonth() {
+    let dat = new Date(getUrlParams().data);
+    console.log(dat.getMonth());
+    let dateMin = `${dat.getFullYear()}-${dat.getMonth()+1}-31`
+    let dateMax = `${dat.getFullYear()}-${dat.getMonth()}-1`
+    let url = `./redPenPage.html?dateMin=${dateMin}&dateMax=${dateMax}`;
+    let name = '소비분석결과';
+    let specs = "width=500,height=400,top=200,left=100, toolbar=no,menubar=no,scrollbars=yes, resizable=yes";
+    window.open(url,name,specs)
+}
 function getUrlParams() {
     var params = {};
     window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
