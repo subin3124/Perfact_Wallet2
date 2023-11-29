@@ -7,7 +7,8 @@ const textColorPicker = document.getElementById('textColorPicker');
 let selectedText = null;
 let selectedImage = null;
 let offsetX, offsetY, isDragging = false;
-
+let cnt = 0;
+let cntT = 0;
 // 이미지 추가
 addImageBtn.addEventListener('click', () => {
     const input = document.createElement('input');
@@ -63,12 +64,12 @@ function addImage(imageURL) {
     const imgElement = document.createElement('img');
     imgElement.src = imageURL;
     imgElement.style.position = 'absolute';
-    imgElement.style.left = '250px';
+    imgElement.style.left = `${250+(200*(cnt%5))}px`;
     imgElement.style.top = '100px';
     imgElement.style.width = '200px';
     imgElement.style.height = 'auto;';
     imgElement.style.cursor = 'grab';
-
+    cnt++;
     imgElement.addEventListener('mousedown', function (event) {
         selectedImage = imgElement;
         const startX = event.clientX;
@@ -156,12 +157,12 @@ function addText(text) {
     textElement.innerText = text;
     textElement.contentEditable = true;
     textElement.style.position = 'absolute';
-    textElement.style.left = '500px';
+    textElement.style.left = `${250+((cntT%5)*250)}px`;
     textElement.style.top = '150px';
     textElement.style.fontSize = fontSizeSelect.value + 'px';
     textElement.style.fontFamily = 'Font';
     textElement.style.color = textColorPicker.value;
-
+    cntT++;
     textElement.addEventListener('mousedown', function (event) {
         selectedText = textElement;
         const startX = event.clientX;
