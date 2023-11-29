@@ -63,6 +63,15 @@ app.get('/getDB', async (req, res) => {
 app.get('/Receipt/date/', async (req, res) => {
     res.send(await receiptRepository.getReceiptByDate(req.query.dateMax, req.query.dateMin));
 });
+app.get('/Receipt/Item/date', async(req,res) => {
+    let ids = await receiptRepository.getReceiptByDate(req.query.dateMax,req.query.dateMin);
+    let ary = [];
+    for(let i in ids) {
+        let data = await receiptItemRepository.getItemsByReceiptID(ids[i].ReceiptID);
+        ary.push(data);
+    }
+    res.send(ary);
+})
 app.post('/Receipt/RedPen/', async (req, res) => {
     let data = req.body;
     let listReceipts = [];

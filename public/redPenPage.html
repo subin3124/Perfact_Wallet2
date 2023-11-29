@@ -5,9 +5,26 @@
     <title>RedPen</title>
 </head>
 <body>
-<
+<canvas id="chart" style="max-height: 200px; max-width: 200px"></canvas>
+<p id="text"></p>
 <script>
-
+    let txt = document.getElementById("text");
+    fetch(`https://inuesc.azurewebsites.net/Receipt/Item/date?dateMax=${getUrlParams().dateMax}&dateMin=${getUrlParams().dateMin}`, {
+        method : 'get'
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        let txtary = "";
+        let total = 0;
+        console.log(data);
+       for(let i in data) {
+           txtary += `품목 : ${data[i].item} \n 금액 : ${data[i].cost}\n`;
+           total += data[i].cost;
+       }
+       txtary+=`합계 : ${total}원`;
+       txt.textContent = txtary;
+       console.log(txtary);
+    });
     function getUrlParams() {
         var params = {};
         window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
@@ -16,19 +33,26 @@
     let params = getUrlParams();
     const DATA_COUNT = 5;
     const NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
-    let labelAry = [];
-    const Chartdata = {
-        labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
-        datasets: [
-            {
-                label: 'Dataset 1',
-                data: Utils.numbers(NUMBER_CFG),
-                backgroundColor: Object.values(Utils.CHART_COLORS),
-            }
-        ]
-    };
-    RedPen1(params.date).then((res) => {
+
+    RedPen1(params.dateMax,params.dateMin).then((res) => {
         console.log(res);
+        let ary = [];
+        let data = [];
+        for (let i in res) {
+            ary.push(res[i].category);
+            data.push(res[i].percent);
+        }
+        console.log(data);
+        const Chartdata = {
+            labels: ary,
+            datasets: [
+                {
+                    label: 'Dataset 1',
+                    data: data,
+                    backgroundColor: ['#ffd950', '#02bc77', '#28c3d7', '#FF6384']
+                }
+            ]
+        };
         const config = {
             type: 'pie',
             data: Chartdata,
@@ -36,15 +60,17 @@
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'bottom',
                     },
                     title: {
                         display: true,
-                        text: 'Chart.js Pie Chart'
+                        text: '소비분석결과'
                     }
                 }
             },
         };
+        let canvas = document.getElementById('chart');
+        let chart_pie = new Chart(canvas,config);
     });
     async function RedPen1(dateMax, dateMin) {
         let dt;
@@ -95,6 +121,6 @@
 
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 </body>
 </html>
