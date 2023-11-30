@@ -36,22 +36,6 @@ async function requestGPT(text) {
             },
             {
                 "role": "user",
-                "content": "참이슬"
-            },
-            {
-                "role": "assistant",
-                "content": "술"
-            },
-            {
-                "role": "user",
-                "content": "진로"
-            },
-            {
-                "role": "assistant",
-                "content": "술"
-            },
-            {
-                "role": "user",
                 "content": "삼성 갤럭시 S20 Ultra"
             },
             {
@@ -93,6 +77,14 @@ async function requestGPT(text) {
             {
                 "role": "user",
                 "content": "불닭볶음면"
+            },
+            {
+                "role": "assistant",
+                "content": "음식"
+            },
+            {
+                "role": "user",
+                "content": "롯데 칸타타 프리미엄블렌드 275ml "
             },
             {
                 "role": "assistant",
