@@ -156,7 +156,7 @@ app.post('/image',upload.single('image'),async (req, res) => {
          });
      }
      detectText(req.file.path); */
-    const url = 'https://inuesc.azurewebsites.net/hostingImage/' + req.file.filename;
+    const url = 'https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/hostingImage/' + req.file.filename;
     await fetch('https://inuesccv.cognitiveservices.azure.com/computervision/imageanalysis:segment?api-version=2023-02-01-preview&mode=backgroundRemoval', {
         method: 'post',
         headers: {

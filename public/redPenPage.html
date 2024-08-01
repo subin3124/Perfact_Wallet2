@@ -9,7 +9,7 @@
 <p id="text" style="white-space: pre-wrap;"></p>
 <script>
     let txt = document.getElementById("text");
-    fetch(`https://inuesc.azurewebsites.net/Receipt/Item/date?dateMax=${getUrlParams().dateMax}&dateMin=${getUrlParams().dateMin}`, {
+    fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/Item/date?dateMax=${getUrlParams().dateMax}&dateMin=${getUrlParams().dateMin}`, {
         method : 'get'
     }).then((res) => {
         return res.json();
@@ -76,7 +76,7 @@
     });
     async function RedPen1(dateMax, dateMin) {
         let dt;
-        await fetch(`https://inuesc.azurewebsites.net/Receipt/date?dateMax=${dateMax}&dateMin=${dateMin}`, {
+        await fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/date?dateMax=${dateMax}&dateMin=${dateMin}`, {
             method: 'GET'
         }).then((response) => {
             if (response.ok) {
@@ -95,7 +95,7 @@
     async function RedPen2(ReceiptArray) {
         let dt;
         let PercentData = [];
-        await fetch('https://inuesc.azurewebsites.net/Receipt/RedPen', {
+        await fetch('https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/RedPen', {
             'method': 'post',
             headers: {
                 'content-type': 'application/json'
