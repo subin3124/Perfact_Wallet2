@@ -9,7 +9,7 @@
 <div id="main"></div>
 <script>
     function load() {
-        fetch(`/Receipt/date/${document.getElementById('date').value}`, {
+        fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/date/${document.getElementById('date').value}`, {
             method : "get"
         }).then((r) => {
             if(!r.ok)
@@ -31,7 +31,7 @@
     }
     function ReciptSaveOnDrop(event) {
         console.log(event.target.id);
-        fetch(`/Receipt/id/${event.target.id}`, {
+        fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/id/${event.target.id}`, {
             method : "get"
         }).then((r) => {
             if(!r.ok)

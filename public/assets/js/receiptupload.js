@@ -4,7 +4,7 @@ function downloadExcel() {
     if(ReceiptID == null)
         alert("업로드 된 영수증이 없습니다.");
     else {
-        fetch(`/excel/${ReceiptID}`, {
+        fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/excel/${ReceiptID}`, {
             method: "GET",
         }).then((res) => res.blob())
             .then((data) => {
@@ -41,7 +41,7 @@ function onUpload() {
 
 //
 function load() {
-fetch(`/Receipt/date/${document.getElementById('date').value}`, {
+fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/date/${document.getElementById('date').value}`, {
     method : "get"
 }).then((r) => {
     if(!r.ok)
@@ -63,7 +63,7 @@ fetch(`/Receipt/date/${document.getElementById('date').value}`, {
 }
 function ReciptSaveOnDrop(event) {
     console.log(event.target.id);
-    fetch(`/Receipt/id/${event.target.id}`, {
+    fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/id/${event.target.id}`, {
         method : "get"
     }).then((r) => {
         if(!r.ok)
