@@ -30,7 +30,7 @@ addImageBtn.addEventListener('click', () => {
 function loadReceipt() {
     let params = getUrlParams();
     let date = params.data;
-    fetch(`https://inuesc.azurewebsites.net/Receipt/date?dateMax=${date}&dateMin=${date}`, {
+    fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/date?dateMax=${date}&dateMin=${date}`, {
         method: 'GET'
     }).then((response)=>{
         if(response.ok) {
