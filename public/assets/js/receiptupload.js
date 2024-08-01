@@ -22,6 +22,7 @@ function downloadExcel() {
 function onUpload() {
     let imgdo = document.getElementById('imageRes');
     console.log("test1");
+    alert("업로드 시작!");
     let formdata = new FormData();
     formdata.append('image',document.getElementById('image').files[0])
     fetch('/image', {
@@ -35,6 +36,7 @@ function onUpload() {
             imgdo.setAttribute('src', res.imageUrl);
             ReceiptID = res.ReceiptID;
             console.log(res);
+            alert("업로드 성공!");
         })
 }
 

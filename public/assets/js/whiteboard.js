@@ -42,7 +42,7 @@ function loadReceipt() {
         for(let i in data) {
             array.push({ReceiptId: data[i].ReceiptID});
             console.log(data[i].ReceiptID);
-            fetch(`https://inuesc.azurewebsites.net/Receipt/id/${data[i].ReceiptID}`, {
+            fetch(`https://inuesc-bxa0gge4b9dgeyhp.eastus-01.azurewebsites.net/Receipt/id/${data[i].ReceiptID}`, {
                 method:'get',
             }).then((res) => { return res.json()}).then((resdata) => {
                 console.log(resdata);
